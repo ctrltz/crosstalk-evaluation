@@ -1,0 +1,89 @@
+\section{Models of the remaining field spread for RIFT data} \label{sec:rfs-models}
+
+For all models, we assumed two dipolar generators of SSVER in V1 (pericalcarine cortex, DK parcellation). In the single-stimulus condition, we assumed that the generators have identical ground-truth time courses of activity and measured coherence between the extracted ROI time series and the external stimulus (brain-stimulus coherence). In the two-stimuli condition, we assumed a phase lag of $\pi/2$ between the ground-truth time courses since such a delay was applied to the presented stimuli, and we measured the absolute value of ImCoh between all pairs of ROIs (brain-brain ImCoh). Fig. \ref{fig:rfs-models}-\tocheck{A} and \ref{fig:rfs-models}-\tocheck{B} show the predictions of all considered models for brain-stimulus coherence and brain-brain ImCoh, respectively.
+
+\subsection{No RFS}
+
+If we assume that no RFS is present after the extraction of the ROI time series, then only the ROIs that contain SSVER generators would show non-zero coherence with the external stimulus in the single-stimulus condition and ImCoh in the two-stimuli condition.
+
+\subsection{Distance-based RFS}
+
+Alternatively, we can account for the distance between ROIs and SSVER generators when evaluating the potential effects of RFS. For the $i$-th ROI, let $d_{1i}$ and $d_{2i}$ be the average Euclidean distance between the vertices of the ROI and two SSVER generators, respectively. Then, brain-stimulus coherence should be related to the average distance $d$ to both SSVER generators from that ROI:
+
+\begin{equation}
+    d = \frac{1}{2} \cdot \left(d_{1i} + d_{2i} \right)
+\end{equation}
+
+In case of brain-brain ImCoh between ROIs $i$ and $j$, we used the minimum distance across pairwise combinations listed below:
+
+\begin{equation}
+    d = \frac{1}{2} \cdot \text{min}\left[d_{1i} + d_{2j}, d_{1j} + d_{2i} \right]
+\end{equation}
+
+Since the precise functional dependency of RFS on distance is not known, we fit a power-law model to the values $c_{real}$ obtained in real data with distance $d$ as a predictor, thus allowing for an arbitrary slope $\gamma$:
+
+\begin{equation}
+    c_{real} \sim d^\gamma
+\end{equation}
+
+In Fig. \ref{fig:rfs-models}, the predictions of the distance-based model are shown with the slope of $-1$ for illustration purposes.
+
+\subsection{CTF-based RFS}
+
+With CTF, we can derive the expected amount of brain-stimulus coherence and brain-brain ImCoh more precisely and additionally capture differences between pipelines for ROI activity extraction. The following holds for the Fourier components of the extracted signal $\hat{r}$ and ground-truth source activity $s_i$ at the stimulation frequency:
+
+\begin{equation}
+    \hat{r} = \vect{k} \vect{s} = \sum\limits_{i=1}^{N_S} k_i s_i
+\end{equation}
+
+In what follows, we refer to the sources assumed to be the SSVER generators by indices 1 and 2, and denote the Fourier component of the stimulus signal (i.e., tagging) as $t$. We assume the following source covariance matrix in the single-stimulus condition (bold elements show that the waveforms of SSVER generators are identical):
+
+\begin{equation}
+    \mat{\Sigma_s^{1\text{stim}}} = \begin{bmatrix}
+1 & \textbf{1} & 0 & 0 & \\
+\textbf{1} & 1 & 0 & 0 & \\
+0 & 0 & \frac{1}{\kappa} & 0 & \\
+0 & 0 & 0 & \frac{1}{\kappa} & \\
+& & & & \dots \end{bmatrix}
+\end{equation}
+
+We additionally assume that only SSVER generators are coupled to the stimulus. In the single-stimulus condition, the activity waveforms are assumed to be the same for both generators:
+\begin{align}
+    & \cs{s_1}{t} = \cs{s_2}{t} \equiv c_{st}, \pxx{t} = 1 \\
+    & \cs{s_i}{t} = 0, \forall i \notin [1, 2]
+\end{align}
+
+Then, the cross-spectrum of the extracted ROI time series and the stimulus can be expressed using the normalized CTF $\tilde{\vect{k}}$ as defined in Eq. \ref{eq:ctf-norm}:
+\begin{equation}
+    \cs{\hat{r}}{t} = \sum\limits_{i=1}^{N_S} k_i \cs{s_i}{t} = k_1 \cs{s_1}{t} + k_2 \cs{s_2}{t} = c_{st} \cdot \left( k_1 + k_2 \right)
+\end{equation}
+
+\begin{equation}
+    \hat{c}_{\hat{r}t} = \frac{\cs{\hat{r}}{t}}{\sqrt{\pxx{t} \cdot \pxx{\hat{r}}}} = \frac{c_{st} \cdot \left( k_1 + k_2 \right)}{\sqrt{\vect{k} \mat{\Sigma_s^{1\text{stim}}} \vect{k}^T}} = c_{st} \cdot \left( \tilde{k}_1 + \tilde{k}_2 \right)
+\end{equation}
+
+In the two-stimuli condition, we assume a $\pi/2$ delay between the time courses of activity of SSVER generators (and hence zero covariance, as highlighted in bold below):
+
+\begin{equation}
+    \mat{\Sigma_s^{2\text{stim}}} = \begin{bmatrix}
+1 & \textbf{0} & 0 & 0 & \\
+\textbf{0} & 1 & 0 & 0 & \\
+0 & 0 & \frac{1}{\kappa} & 0 & \\
+0 & 0 & 0 & \frac{1}{\kappa} & \\
+& & & & \dots \end{bmatrix}
+\end{equation}
+
+The predicted ImCoh between ROIs $i$ and $j$ can be calculated using Eq. \ref{eq:imcoh-mixing} with $\mat{\Sigma_s^{2\text{stim}}}$ in the normalization:
+
+\begin{equation}
+    \Imag(\hat{c}_{ij}^r) = \Imag(c_{12}^s) \cdot \left( \tilde{k}_{i1} \tilde {k}_{j2} - \tilde{k}_{i2} \tilde{k}_{j1} \right)
+\end{equation}
+
+In Fig. \ref{fig:rfs-models}, we show the predictions of the CTF-based model for an exemplary subject and pipeline (eLORETA followed by averaging), using a $\kappa$ of 100 for illustration purposes. When fitting the models, we performed a grid search over five values of $\kappa$ (10, 20, 50, 100, and 200).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figDsupp_rfs_models.png}
+    \caption{Predictions of the considered models of RFS for exemplary locations of SSVER generators (centroids of the pericalcarine cortex of both hemispheres, defined according to the DK parcellation). For the CTF-based model, the \tocheck{$\kappa$} of 100 was used. (A) Predicted values of brain-stimulus coherence in the single-stimulus condition. (B) Predicted values of brain-brain ImCoh in the two-stimuli condition.}
+    \label{fig:rfs-models}
+\end{figure}

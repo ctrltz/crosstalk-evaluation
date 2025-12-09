@@ -1,0 +1,50 @@
+\section{Additional figures and tables}
+
+\begin{table}[htbp]
+    \centering
+    \scResultsTable
+    \caption{Correlations between CTF-/distance-based estimates of spurious coherence (SC) and values of SC derived from surrogate data for each extraction pipeline and condition. The right-most column shows the average correlation for the three considered pipelines.}
+    \label{tab:spurious-coherence}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \riftOnestimResults
+    \caption{Correlations between the observed values of brain-stimulus coherence and the ones predicted by three considered models of RFS (no RFS, distance-based, and CTF-based). Rows correspond to different experimental conditions of the RIFT dataset (defined by tagging type and the starting phase of the stimulus) and to two types of comparisons performed (raw/delta).}
+    \label{tab:rift-onestim}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \riftTwostimResults
+    \caption{Correlations between the observed values of brain-brain ImCoh and the ones predicted by three considered models of RFS (no RFS, distance-based, and CTF-based). Rows correspond to different experimental conditions of the RIFT dataset (defined by tagging type) and to two types of comparisons performed (raw/delta).}
+    \label{tab:rift-twostim}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig4supp_max_ratios.png}
+    \caption{The theoretical upper limits of the CTF ratio for commonly used parcellations. Abbreviations: HCP -- Human Connectome Project.}
+    \label{fig:max-ratios}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figEsupp_rift_noise_floor_onestim.png}
+    \caption{Noise floor for brain-stimulus coherence. (A) Null distribution of coherence between \tocheck{$\riftNoiseFloorNumSimulations$} simulated independent time series. Red dashed line corresponds to the \tocheck{$\riftNoiseFloorPercentile$}th percentile of the distribution, which was used as the threshold for significance. (B) Histograms of brain-stimulus coherence obtained from real data (tagging type 1, fixed starting phase) for each pipeline, and brain masks showing which ROIs exceeded the noise floor.}
+    \label{fig:noise-floor-onestim}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figEsupp_rift_noise_floor_twostim.png}
+    \caption{Noise floor for brain-brain ImCoh. (A) Null distribution of the absolute values of ImCoh between \tocheck{$\riftNoiseFloorNumSimulations$} simulated independent time series. Red dashed line corresponds to the \tocheck{$\riftNoiseFloorPercentile$}th percentile of the distribution, which was used as the threshold for significance. (B) Brain-brain ImCoh obtained from real data (tagging type 1, random starting phase) for each pipeline, shown from left to right as a histogram, a connectivity matrix, and a mask indicating brain-brain ImCoh values exceeding the noise floor.}
+    \label{fig:noise-floor-twostim}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/figEsupp_rift_twostim.png}
+    \caption{Whole-brain patterns of ImCoh between extracted ROI time series (brain-brain ImCoh) can be explained by two point-like sources located in V1 of both hemispheres using CTF. (A) In the two-stimuli passive viewing condition of the RIFT dataset, there was a $\pi/2$ phase delay between time courses of luminance modulation for the presented stimuli. (B) The lead field of the dipole configuration that yielded the best fit for the CTF-based model. (C) CTF- and distance-based approaches explained comparable variance in the raw values of brain-brain ImCoh, but CTF also partially explained the difference between pipelines for ROI extraction (delta). The correlation values were computed across pooled data from three data-independent extraction pipelines. (D) Theoretical predictions based on CTF and estimates of brain-brain ImCoh from real data are positively correlated for all considered pipelines. For all panels, we used the data from the experimental condition with full luminance modulation (tagging type 1) and random starting phase.}
+    \label{fig:rift-twostim}
+\end{figure}

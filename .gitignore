@@ -1,0 +1,43 @@
+# Editor config
+.vscode
+
+# Python
+*.py[cod]
+
+# Snakemake
+.snakemake
+.workspace
+workflow/cluster
+
+# TeX
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fff
+paper/*.lo[cg]
+paper/*.out
+paper/*.pdf
+paper/*.soc
+paper/*.spl
+paper/*.ttt
+
+# Env variables that are actually used
+.env
+
+# venv
+.venv
+
+# Project folders
+data
+inkscape
+results
+slurm/logs
+
+# Cache
+.cache
+.pytest_cache
+.ruff_cache
+**/__pycache__
+
+# Testing data
+tests/data

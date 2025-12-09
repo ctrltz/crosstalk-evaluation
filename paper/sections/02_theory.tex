@@ -1,0 +1,110 @@
+\section{Theory} \label{sec:theory}
+
+This section presents the mathematical derivations of the main ideas presented in the paper. Throughout the section, normal letters ($N_C$, $\hat{r}$) denote scalars, bold lowercase letters ($\vect{x}$) -- vectors, bold uppercase letters ($\mat{L}$) -- matrices. $\mathbb{R}$ denotes the set of real numbers, while $\EV$ stands for the expected value. The circumflex ("hat"; $\hat{r}$, $\hat{\vect{s}}$) is used to denote estimated values. Superscript T denotes transposed matrices. The complete notation is presented in Table \ref{supp-tab:notation}.
+
+\subsection{Cross-talk function}
+
+The cross-talk function is closely related to the concept of resolution matrix, which shows how well a linear inverse operator can resolve the modeled sources of activity \citep{BackusGilbert1968, dePeraltaMenendez1996}. Let $\vect{x}(t) \in \mathbb{R}^{N_C \times 1}$ and $\vect{s}(t) \in \mathbb{R}^{N_S \times 1}$ be the data recorded from $N_C$ channels and ground truth activity of $N_S$ source dipoles at the time point $t$, respectively. In what follows, we omit the time dependence for conciseness. Assuming that the dipoles are oriented along the normal to the cortical surface, the lead field matrix $\mat{L} \in \mathbb{R}^{N_C \times N_S}$ describes the theoretical relationship between the sensor-space data $\vect{x}$ and source activity $\vect{s}$ in the absence of measurement noise:
+
+\begin{equation} \label{eq:forward}
+    \vect{x} = \mat{L} \vect{s}
+\end{equation}
+
+To obtain the reconstructed estimates of source activity $\hat{\vect{s}} \in \mathbb{R}^{N_S \times 1}$ given the sensor-space data $\vect{x}$, we apply an inverse operator $\mat{W} \in \mathbb{R}^{N_S \times N_C}$:
+
+\begin{equation} \label{eq:inverse}
+    \hat{\vect{s}} = \mat{W} \vect{x}
+\end{equation}
+
+In the equation above, $\mat{W}$ can correspond to minimum-norm estimates and their generalizations, or to stacked vectors with beamformer weights (cf. \cite{Grech2008} for a review of source analysis methods). By combining equations \ref{eq:forward} and \ref{eq:inverse}, we obtain a relationship between the ground-truth and the reconstructed source activity, which is described by the resolution matrix $\mat{K} \in \mathbb{R}^{N_S \times N_S}$:
+\begin{align}
+    \hat{\vect{s}} &= \mat{W} \mat{L} \vect{s} = \mat{K} \vect{s} \\
+    \mat{K} &= \mat{W} \mat{L} \label{eq:resolution_matrix}
+\end{align}
+
+The rows of the resolution matrix $\mat{K}$ are referred to as the cross-talk function (CTF; \cite{Hauk2011}). CTF describes the relationship between the activity of one reconstructed and all ground-truth sources, thereby quantifying the degree of remaining field spread (RFS).
+
+\subsection{Extraction of ROI activity}
+
+In the present study, we apply CTF to analyze the amount and the pattern of RFS after the extraction of ROI activity. In the standard approach (see Supp. Mat. \ref{supp-sec:review} for a review), ROI time series are obtained through aggregation of reconstructed estimates of activity for individual sources $\hat{\vect{s}}$ using a set of weights $\vect{w}_{agg} \in \mathbb{R}^{1 \times N_S}$ (see Table \ref{supp-tab:weights} for commonly used options):
+
+\begin{equation}
+    \hat{r} = \vect{w}_{agg} \hat{\vect{s}} = \vect{w}_{agg} \mat{W} \vect{x}
+\end{equation}
+
+Notice that commonly used approaches can be represented by an equivalent spatial filter $\vect{w} \in \mathbb{R}^{1 \times N_C}$ as defined below and shown in Fig. \ref{fig:general_idea}\tocheck{A}. We therefore focus on spatial filters in our discussion of different extraction pipelines:
+
+\begin{align}
+    \vect{w} &= \vect{w}_{agg} \mat{W} \\
+    \hat{r} &= \vect{w} \vect{x}
+\end{align}
+
+For a spatial filter $\vect{w}$, it is possible to define the CTF (denoted below as $\vect{k} \in \mathbb{R}^{1 \times N_S}$) in a similar way to the equation \ref{eq:resolution_matrix}. The resulting CTF quantifies the relationship between the extracted time series of ROI activity $\hat{r}$ and ground-truth activity of all sources $\vect{s}$:
+\begin{align}
+    \vect{k} &= \vect{w} \mat{L} \\
+    \hat{r} &= \vect{k} \vect{s}
+\end{align}
+
+The CTF can also be visualized as a brain map, providing an intuitive way to estimate the potential main contributors of source activity (Fig. \ref{fig:general_idea}\tocheck{B}). However, it is crucial to keep in mind that CTF reflects only the potential contribution of sources. In contrast, their actual contribution also depends on the covariance matrix of the source activity \citep{Lütkenhöner1997}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig1_general_idea.png}
+    \caption{Evaluating the remaining field spread after the extraction of ROI activity using the cross-talk function (CTF). In all panels, a combination of eLORETA and mean-flip weights is used to extract ROI activity. Grey rectangles correspond to the vectors and matrices used in the derivation of CTF, and the red highlight shows the rows/columns that correspond to the sources within the target ROI. (A) An equivalent spatial filter can represent every combination of linear methods for inverse modeling and ROI aggregation. The right postcentral gyrus (Desikan-Killiany parcellation) is used as a target ROI in Panels A-C. (B) For a spatial filter, CTF shows the potential contribution of all modeled sources to the extracted time series. By default, unit variance and zero cross-covariance are assumed, but a custom source covariance matrix can be incorporated into calculations. (C) If squared, CTF reflects the potential contribution in terms of power, or the amount of variance of the ROI time series explained by each source. (D) The ratio of the norms of element-wise squared CTF within the target ROI to the whole brain can be used to evaluate the extraction of ROI activity. The higher the CTF ratio, the more likely sources within the ROI are to contribute to the extracted time series. The right insula and right postcentral gyrus are used as target ROIs to illustrate low and high CTF ratios, respectively.}
+    \label{fig:general_idea}
+\end{figure}
+
+\subsection{CTF reflects power contributions to the extracted time series}
+
+If we assume that the ground-truth source activity has zero mean (e.g., due to band-pass filtering) and a diagonal covariance matrix $\mat{\Sigma}_s \in \mathbb{R}^{N_S \times N_S}$, then the power of the extracted ROI time series $P_{\hat{r}}$ is a weighted sum of the ground-truth power of all sources $P_i = \Var(s_i)$, with weights being equal to the squared CTF elements $k_i^2$ (Fig. \ref{fig:general_idea}\tocheck{C}):
+
+\begin{equation} \label{eq:squared-ctf}
+    P_{\hat{r}} = \Var(\hat{r})= \Var(\vect{k} \vect{s}) = \vect{k} \mat{\Sigma}_s \vect{k}^T = \sum\limits_{i=1}^{N_S} k_i^2 \Var(s_i) = \sum\limits_{i=1}^{N_S} k_i^2 P_i
+\end{equation}
+
+Equation \ref{eq:squared-ctf} also shows how one can incorporate the prior knowledge in the form of the source covariance matrix in power calculations.
+
+\subsection{CTF ratio as a metric of extraction quality}
+
+In practice, the exact locations of ground-truth sources are often unknown. However, it is possible to evaluate the potential average contribution of sources within the ROI to the extracted signal for a given spatial filter $\vect{w}$ with the following ratio (later referred to as CTF ratio):
+
+\begin{equation} \label{eq:ctf-ratio}
+    R(\vect{w}) = \frac{\sum\limits_{i \in \text{ROI}} k_i^2(\vect{w})}{\sum\limits_{i=1}^{N_S} k_i^2(\vect{w})} = \frac{|| \vect{k}_{in}(\vect{w}) ||^2}{|| \vect{k}(\vect{w}) ||^2} = \frac{\vect{w} \mat{L}_{in} \mat{L}_{in}^T \vect{w}^T}{\vect{w} \mat{L} \mat{L}^T \vect{w}^T},
+\end{equation}
+
+\noindent where $\vect{k}_{in} = [k_i: i \in \text{ROI}] \in \mathbb{R}^{1 \times N_{in}}$ is a subvector of $\vect{k}$ that contains only elements corresponding to sources within the ROI, $\mat{L}_{in} = [L_{ij}: j \in \text{ROI}] \in \mathbb{R}^{N_C \times N_{in}}$ -- a submatrix of $\mat{L}$ that contains only columns corresponding to sources from the ROI, $N_{in}$ -- the number of sources in the ROI.
+
+As shown in Supp. Mat. \ref{supp-sec:extraction-quality}, the CTF ratio corresponds to the expected correlation between extracted ROI time series and ground-truth activity of sources within the ROI. With a higher CTF ratio, it is more likely that sources within the target ROI will become the main contributors to the extracted time series (Fig. \ref{fig:general_idea}\tocheck{D}). In Supp. Mat. \ref{supp-sec:ratio-variations} we also discuss alternative definitions of the CTF ratio for arbitrary source and noise covariance matrices.
+
+CTF ratio and its variations were previously considered by \cite{Gross1999}, \cite{Bolton1999}, and \cite{GrosseWentrup2009}, with all studies focusing mainly on spatial filters $\vect{w}^*$ that optimize the CTF ratio and can be obtained via a generalized eigenvalue decomposition:
+
+\begin{equation}
+    \vect{w}^* = \Eig \left[ \mat{L}_{in} \mat{L}_{in}^T, \mat{L} \mat{L}^T \right]
+\end{equation}
+
+However, such optimization also defines the theoretical upper limit of the CTF ratio for a given leadfield, sensor setup, and parcellation. In the current study, we investigate the upper limit of the CTF ratio in detail and highlight the role of CTF as a diagnostic tool for all spatial filters, not only the optimal ones.
+
+\subsection{Effect of RFS on the estimation of inter-regional connectivity}
+
+Finally, we show how CTF can be used to investigate the effect of RFS on the estimates of functional connectivity between ROIs. Specifically, we show that the amount of spurious coherence (SC) and the effect of the RFS on the imaginary part of coherency (ImCoh; \cite{Nolte2004}) can be evaluated using CTF.
+
+Due to RFS, the same sources may contribute to the time series of different ROIs, thereby leading to a spurious (i.e., not driven by any genuine interaction) increase in the absolute part of coherency. With CTF, we can estimate the expected amount of SC, assuming no genuine ground-truth interactions among all sources. The expected amount of SC for any pair of ROIs (denoted as $i$ and $j$ below) and any extraction method is equal to the dot product of normalized CTFs $\vect{\tilde{k}}_i$ and $\vect{\tilde{k}}_j$ (see Supp. Mat. \ref{supp-sec:connectivity_estimation} for details):
+
+\begin{equation} \label{eq:ctf-normalization}
+    \vect{\tilde{k}} = \frac{\vect{k} \cdot \Diag\{\sqrt{\pxx{s_i}}\}}{\sqrt{\vect{k} \mat{\Sigma}_s \vect{k}^T}}
+\end{equation}
+
+\begin{equation} \label{eq:spurious-coherence}
+    c_{ij}^{spurious} = \left| \vect{\tilde{k}}_i \vect{\tilde{k}}_j^T \right|,
+\end{equation}
+
+\noindent where $\Diag\{\sqrt{\pxx{s_i}}\}$ is a diagonal matrix containing the standard deviation of source activity for each source. The resulting equation for SC suggests that it depends on source amplitudes and the spatial overlap of the CTFs of spatial filters for ROIs $i$ and $j$. Similar observations were made by \cite{Altukhov2023}, leading to the derivation of spatial filters that minimize the spatial overlap of CTFs.
+
+In addition, it is possible to show that the estimated ImCoh between ROIs $i$ and $j$ can be represented as a weighted sum of ground-truth ImCoh between all pairs of sources, with mixing weights (denoted as $M_{lm}^{ij}$ for sources $l$ and $m$) depending on the normalized CTFs of both ROIs (details can be found in Supp. Mat. \ref{supp-sec:connectivity_estimation}):
+
+\begin{align}
+    \Imag\{\hat{c}_{ij}^r\} &= \sum\limits_{l \bm{<} m} \Imag\{c_{lm}^s\} M_{lm}^{ij} \label{eq:imcoh-mixing} \\
+    \mat{M}^{ij} &= \vect{\tilde{k}}_i^T \vect{\tilde{k}}_j - \vect{\tilde{k}}_j^T \vect{\tilde{k}}_i \label{eq:imcoh-weights}
+\end{align}
+
+Equations \ref{eq:imcoh-mixing} and \ref{eq:imcoh-weights} represent a generalization of Eq. 12 from \citep{Sekihara2011} for the case of multiple ground-truth interactions.

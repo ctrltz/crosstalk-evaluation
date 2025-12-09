@@ -1,0 +1,74 @@
+from ctfeval.config import paths, settings
+from ctfeval.datasets import get_lemon_subject_ids, get_rift_subject_ids
+from ctfeval.parcellations import PARCELLATIONS
+from ctfeval.utils import get_simulation_names_for_experiment, get_label_names
+
+lemon_subject_ids = get_lemon_subject_ids(settings.lemon_bids)
+rift_subject_ids = get_rift_subject_ids()
+
+include: "prepare.smk"
+include: "examples.smk"
+include: "theory.smk"
+include: "simulations.smk"
+include: "experiments.smk"
+include: "spurious_coherence.smk"
+include: "rift.smk"
+include: "figures.smk"
+include: "numbers.smk"
+
+wildcard_constraints:
+    cond="(onestim|twostim)",
+    conn_preset="(none|weak|strong)",
+    data_cov_mode="(actual|auto)",
+    experiment="(1|2|3|4a|4b)",
+    mask_mode="(roi|source)",
+    method="(mean|mean_flip|centroid)",
+    parcellation="(DK|Schaefer400)",
+    source_cov_mode="(no_info|full_info)",
+    spacing="(oct6|ico4)"
+
+
+rule main:
+    input:
+        # Figure 1
+        f"{paths.figure_components}/fig1_sf.svg",
+        f"{paths.figure_components}/fig1_ctf_amplitude.png",
+        f"{paths.figure_components}/fig1_ctf_high.png",
+        f"{paths.figure_components}/fig1_ctf_low.png",
+        f"{paths.figure_components}/fig1_ctf_power.png",
+        # Figure 2
+        f"{paths.figure_components}/fig2_sc.png",
+        f"{paths.figure_components}/fig2_info.svg",
+        f"{paths.figure_components}/fig2_gt.svg",
+        f"{paths.figure_components}/fig2_rec.svg",
+        f"{paths.figure_components}/fig2_exp1.png",
+        f"{paths.figure_components}/fig2_exp2.png",
+        f"{paths.figure_components}/fig2_exp3.png",
+        f"{paths.figure_components}/fig2_exp4a.svg",
+        f"{paths.figure_components}/fig2_exp4b.svg",
+        # Figure 3
+        f"{paths.figure_components}/fig3_minimal_example.svg",
+        f"{paths.figure_components}/fig3_vertex_legend.svg",
+        # Figure 4
+        f"{paths.figures}/fig4_ctf_metrics.png",
+        # Figure 5
+        f"{paths.figures}/fig5_experiments.png",
+        # Figure 6
+        f"{paths.figures}/fig6_spurious_coherence.png",
+        # Figure 7
+        f"{paths.figures}/fig7_connectivity_example.png",
+        # Figure 8
+        f"{paths.figures}/fig8_rift_onestim.png",
+        # Supplementary - section-specific
+        f"{paths.figure_components}/figAsupp-barplots.svg",
+        f"{paths.figure_components}/figAsupp-sankey.svg",
+        f"{paths.figures}/figBsupp_imcoh_recovery.png",
+        f"{paths.figures}/figCsupp_inferred_params.png",
+        f"{paths.figures}/figDsupp_rfs_models.png",
+        # Supplementary - additional figures
+        f"{paths.figures}/fig4supp_max_ratios.png",
+        f"{paths.figures}/figEsupp_rift_noise_floor_onestim.png",
+        f"{paths.figures}/figEsupp_rift_twostim.png",
+        # Numbers
+        f"{paths.numbers}/numbers_main.tex",
+        f"{paths.numbers}/numbers_supplementary.tex"

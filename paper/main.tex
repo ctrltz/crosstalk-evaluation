@@ -1,0 +1,125 @@
+\documentclass[preprint,authoryear,semicolon,12pt]{elsarticle}
+
+\usepackage{adjustbox}   % adjustbox
+\usepackage{amsmath}     % align
+\usepackage{amssymb}     % \mathbb for the set of real numbers
+\usepackage{bm}          % bold symbols in equations
+\usepackage{booktabs}    % table styling
+\usepackage{caption}     % control table/figure captions
+\usepackage{cmap}        % copiable / searchable text
+\usepackage[final, defaultcolor=red]{changes}     % added, replaced, deleted
+% \usepackage[nolists,noheads,nomarkers,tablesfirst]{endfloat}
+\usepackage{geometry}    % page setup
+\usepackage{graphicx}    % Required for inserting images
+\usepackage{longtable}   % multi-page tables
+\usepackage{lineno}      % line numbers
+\usepackage{multirow}    % multi-row cells in tables
+\usepackage[colorlinks=true]{hyperref}
+
+%----Helper code for dealing with external references----
+% (by cyberSingularity at http://tex.stackexchange.com/a/69832/226)
+% see also https://www.overleaf.com/learn/how-to/Cross_referencing_with_the_xr_package_in_Overleaf
+
+\usepackage{xr}
+\makeatletter
+
+\newcommand*{\addFileDependency}[1]{% argument=file name and extension
+\typeout{(#1)}% latexmk will find this if $recorder=0
+% however, in that case, it will ignore #1 if it is a .aux or 
+% .pdf file etc and it exists! If it doesn't exist, it will appear 
+% in the list of dependents regardless)
+%
+% Write the following if you want it to appear in \listfiles 
+% --- although not really necessary and latexmk doesn't use this
+%
+\@addtofilelist{#1}
+%
+% latexmk will find this message if #1 doesn't exist (yet)
+\IfFileExists{#1}{}{\typeout{No file #1.}}
+}\makeatother
+
+\newcommand*{\myexternaldocument}[1]{%
+\externaldocument[supp-]{#1}%
+\addFileDependency{#1.tex}%
+\addFileDependency{#1.aux}%
+}
+%------------End of helper code--------------
+
+% Links to the external document
+\myexternaldocument{supplementary}
+
+% Remove info about journal submission
+\journal{}
+\makeatletter
+\def\ps@pprintTitle{%
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\reset@font\hfil\thepage\hfil}
+  \let\@evenfoot\@oddfoot
+}
+\makeatother
+
+\geometry{a4paper, total={160mm,250mm}, left=25mm, top=25mm}
+\renewcommand{\baselinestretch}{1.25}
+
+\newcommand{\at}{@}
+\newcommand{\mytodo}[1]{\textcolor{blue}{#1}}
+\newcommand{\tofix}[1]{\textcolor{magenta}{#1}}
+% \newcommand{\tocheck}[1]{\textcolor{magenta}{#1}}
+\newcommand{\tocheck}[1]{#1}
+\newcommand{\vect}[1]{\bm{\mathbf{#1}}}
+\newcommand{\mat}[1]{\bm{\mathbf{#1}}}
+\newcommand{\cs}[2]{\langle #1 #2^* \rangle}
+\newcommand{\pxx}[1]{\langle |#1|^2 \rangle}
+\newcommand{\corr}[2]{\Corr(#1, #2)}
+\newcommand{\corrsq}[2]{\Corr^2(#1, #2)}
+\newcommand{\cov}[2]{\Cov(#1, #2)}
+\DeclareMathOperator{\Diag}{\text{Diag}}
+\DeclareMathOperator{\Eig}{\text{eig}}
+\DeclareMathOperator{\EV}{\mathbb{E}}
+\DeclareMathOperator{\Imag}{\text{Im}}
+\DeclareMathOperator{\Real}{\text{Re}}
+\DeclareMathOperator{\Var}{\text{Var}}
+\DeclareMathOperator{\Corr}{\text{Corr}}
+\DeclareMathOperator{\Cov}{\text{Cov}}
+
+% Caption setup
+\captionsetup{font=footnotesize, width=\textwidth}
+
+% Numbers (settings, results)
+\input{numbers/combined}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Non-uniform effects of remaining field spread on the estimation of M/EEG activity and connectivity between regions of interest}
+
+\input{authors}
+
+\begin{abstract}
+    \input{sections/00_abstract}
+\end{abstract}
+
+\end{frontmatter}
+
+% \linenumbers
+
+\input{sections/01_introduction}
+
+\input{sections/02_theory}
+
+\input{sections/03_methods}
+
+\input{sections/04_results}
+
+\input{sections/05_discussion}
+
+\input{sections/06_conclusion}
+
+\input{sections/07_statements}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{main}
+
+\end{document}

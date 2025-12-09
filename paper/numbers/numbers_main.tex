@@ -1,0 +1,109 @@
+% Environment
+
+\newcommand{\versionPython}{3.12.11}
+\newcommand{\versionMNE}{1.9.0}
+\newcommand{\versionMEEGsim}{0.0.2}
+
+% LEMON stats and demographics
+
+\newcommand{\lemonNumIncluded}{200}
+\newcommand{\lemonNumMale}{127}
+\newcommand{\lemonNumFemale}{73}
+\newcommand{\lemonNumYoung}{137}
+\newcommand{\lemonNumOld}{63}
+\newcommand{\lemonEOMinutes}{7.8}
+\newcommand{\lemonECMinutes}{7.9}
+
+% Common parameters
+
+\newcommand{\fminAlphaHz}{8}
+\newcommand{\fmaxAlphaHz}{12}
+\newcommand{\invReg}{0.05}
+\newcommand{\simOctVertices}{4098}
+\newcommand{\simIcoVertices}{2562}
+
+% Simulation parameters - Experiments 1-4b
+
+\newcommand{\simNumSimulations}{100}
+\newcommand{\simSfreq}{250}
+\newcommand{\simDuration}{120}
+\newcommand{\simNumNoiseSources}{500}
+\newcommand{\simGlobalSNR}{3}
+\newcommand{\simGlobalSNRdB}{4.8}
+\newcommand{\simSensorNoiseDefault}{1}
+\newcommand{\simPatchSizeDefault}{2}
+\newcommand{\simConnWeakNumEdges}{10}
+\newcommand{\simConnWeakCohMean}{0.25}
+\newcommand{\simConnWeakCohSD}{0.1}
+\newcommand{\simConnStrongNumEdges}{20}
+\newcommand{\simConnStrongCohMean}{0.75}
+\newcommand{\simConnStrongCohSD}{0.3}
+
+% Simulation parameters - Experiments A & C
+
+\newcommand{\simExpAUnequalStd}{3}
+\newcommand{\connExamplePatchSize}{2}
+\newcommand{\connExampleGTCoh}{0.6}
+\newcommand{\connExampleGTPhaseLag}{\pi/3}
+
+% Spurious coherence
+
+\newcommand{\scNumPermutations}{100}
+\newcommand{\scPermSegLen}{2}
+\newcommand{\scNumDKConnections}{2278}
+\newcommand{\scResultsTable}{\begin{tabular}{ccccccc}
+\toprule
+Comparison & Model & Condition & \multicolumn{4}{c}{Correlation} \\
+ &  &  & mean & mean-flip & centroid & average \\
+\midrule
+\multirow{4}{*}{raw} & \multirow{2}{*}{CTF} & EC & 0.87 & 0.87 & 0.87 & 0.87 \\
+ &  & EO & 0.88 & 0.88 & 0.89 & 0.88 \\
+ & \multirow{2}{*}{Distance} & EC & 0.62 & 0.61 & 0.69 & 0.64 \\
+ &  & EO & 0.65 & 0.64 & 0.72 & 0.67 \\
+\midrule
+\multirow{2}{*}{delta} & \multirow{2}{*}{CTF} & EC & 0.75 & 0.77 & 0.75 & 0.76 \\
+ &  & EO & 0.77 & 0.78 & 0.76 & 0.77 \\
+\bottomrule
+\end{tabular}
+}
+\newcommand{\scCTFDeltaEV}{58}
+
+% RIFT
+
+\newcommand{\riftStimFreq}{60}
+\newcommand{\riftNoiseFloorPercentile}{95}
+\newcommand{\riftNoiseFloorNumSimulations}{1000}
+\newcommand{\riftOnestimResults}{\begin{tabular}{cccccc}
+\toprule
+Comparison & Tagging type & Stimulus phase & \multicolumn{3}{c}{Correlation} \\
+ &  &  & No RFS & Distance & CTF \\
+\midrule
+\multirow{4}{*}{raw} & \multirow{2}{*}{1} & fixed & 0.41 & 0.86 & 0.82 \\
+ &  & random & 0.40 & 0.85 & 0.80 \\
+ & \multirow{2}{*}{4} & fixed & 0.42 & 0.81 & 0.79 \\
+ &  & random & 0.45 & 0.81 & 0.79 \\
+\midrule
+\multirow{4}{*}{delta} & \multirow{2}{*}{1} & fixed & --- & --- & 0.63 \\
+ &  & random & --- & --- & 0.60 \\
+ & \multirow{2}{*}{4} & fixed & --- & --- & 0.72 \\
+ &  & random & --- & --- & 0.71 \\
+\bottomrule
+\end{tabular}
+}
+\newcommand{\riftOnestimDeltaEVMin}{36}
+\newcommand{\riftOnestimDeltaEVMax}{51}
+\newcommand{\riftTwostimResults}{\begin{tabular}{cccccc}
+\toprule
+Comparison & Tagging type & \multicolumn{3}{c}{Correlation} \\
+ &  & No RFS & Distance & CTF \\
+\midrule
+\multirow{2}{*}{raw} & 1 & 0.04 & 0.63 & 0.62 \\
+ & 4 & 0.01 & 0.55 & 0.61 \\
+\midrule
+\multirow{2}{*}{delta} & 1 & --- & --- & 0.36 \\
+ & 4 & --- & --- & 0.39 \\
+\bottomrule
+\end{tabular}
+}
+\newcommand{\riftTwostimDeltaEVMin}{13}
+\newcommand{\riftTwostimDeltaEVMax}{15}

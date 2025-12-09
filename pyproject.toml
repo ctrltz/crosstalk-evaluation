@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ctfeval"
+version = "0.1.0"
+authors = [
+  { name="Nikolai Kapralov", email="kapralov@cbs.mpg.de" },
+  { name="Alina Studenova", email="studenova@cbs.mpg.de" },
+  { name="Rubén Eguinoa", email="ruben.eguinoa@unavarra.es" },
+]
+description = "Cross-talk function as a tool for evaluating the extraction of M/EEG activity from brain areas of interest"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv",
+    "holoviews",
+    "matplotlib==3.10.3",
+    "mne==1.9.0",
+    "nibabel",
+    "numpy",
+    "pymatreader",
+    "pyqt5",
+    "pyvistaqt",
+    "seaborn",
+    # More recent version of scipy (1.16.0) caused a massive slow down in data2cs_fourier
+    # Didn't check in detail, just locked the version to the one that was working fine for me
+    "scipy==1.14.0",
+    "scikit-learn",
+    "tomlkit",
+    "tqdm",
+    "meegsim==0.0.2",
+    # dev version of ROIextract (be2c634e66d927b03a36a7b950b943cb136dd001 as of 2025/11/27)
+    "roiextract@git+https://github.com/ctrltz/roiextract.git",
+]
+
+[project.urls]
+Homepage = "https://github.com/ctrltz/crosstalk-evaluation"
+Issues = "https://github.com/ctrltz/crosstalk-evaluation/issues"
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel",
+    "ipywidgets",
+    "pre-commit",
+    "pytest",
+    "snakemake==9.7.1",
+    "snakemake-executor-plugin-slurm==1.4.0"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ctfeval"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = [
+    "tests",
+]
+
+[tool.ruff]
+exclude = [
+    "assets",
+    "paper",
+    "*.svg"
+]

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="54.165241pt" height="216.058045pt" viewBox="0 0 54.165241 216.058045" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2025-12-08T21:33:22.031995</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.3, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 216.058045 
+L 54.165241 216.058045 
+L 54.165241 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 7.2 204.221229 
+L 35.1 204.221229 
+L 35.1 10.181229 
+L 7.2 10.181229 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAACcAAAEOCAYAAAAKdw5/AAACUElEQVR4nO3cwZWdMBBEUQE9+UxKzj8GwBEwi9roLupF8E51SY3sbx8/v//ehTLHee12+OTcLfAXdHKVS5njguVOOrnKZcxxulednlzlIux7zk5OluuGCKlcCi3nLtaFJ9cNkVK5lDnPY7fDJ3PQcgcs17GG2HKn3Dk6OVoOP627Fb7pJZxCHwi4cXhy3RAptpx9ldid263wDT5WWk7uXMcaMlflMiqXYsuNLCcnB699PLm55F9H4MlVLmIu+XvOTk6W6/oKqVxK5VIql1K5FPdLc+HJ2Z9M9N9DXK4b/oeH7VxIO5fSsabgybVzGe1cit653Qrf0IvffkPgB2K3wjd4crKcnVw7lzGw25pzuXZ4crKcnVw7l4F3brfBH3RDpAy89/E3hP1rV9etByKmnUvR19duhW/auRS9c66evSGOl/2fLNes99nt8Mkcshyd3GrnMuTPuR6ImMqlzHpguR6IkG6IlHYupXIpeOfkDdF7LgTvHCxnvyHk5GY9926HT+al7zk5OVruvWE5e7fSY5Xl6LHiydFy8ljte65yEf0qSaHl7DdEOxdiy+Ebop2LsL/n6KvkvSsX0bGm2HKPvCHauRBcTh7rAyeHvyHg5HA5+UDYyclyT8eaYb9be1pDbDl58bdzKfPe8M+F8M7RycFy8oHQ3xDwWNu5kHnkqwTvHDxWOjlazh6rfFp7CYfoBwKWo19fdnK2XMca0TdEyjzyv166bbndCt80uZQml9LkUnQ5167JpTS5lCaXMu7zRn9D0GPtgQhpcilNLoVO7j9txk2uKYr1JgAAAABJRU5ErkJggg==" id="image2836a799ec" transform="scale(1 -1) translate(0 -194.4)" x="7.2" y="-10.08" width="28.08" height="194.4"/>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m38b5c1a902" d="M 0 0 
+L 3.5 0 
+" style="stroke: #808080; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m38b5c1a902" x="35.1" y="204.221229" style="fill: #808080; stroke: #808080; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <!-- - -->
+      <g style="fill: #808080" transform="translate(42.1 207.202458) scale(0.0833 -0.0833)">
+       <defs>
+        <path id="ArialMT-2d" d="M 203 1375 
+L 203 1941 
+L 1931 1941 
+L 1931 1375 
+L 203 1375 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#ArialMT-2d"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m38b5c1a902" x="35.1" y="10.181229" style="fill: #808080; stroke: #808080; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <!-- + -->
+      <g style="fill: #808080" transform="translate(42.1 13.162458) scale(0.0833 -0.0833)">
+       <defs>
+        <path id="ArialMT-2b" d="M 1603 741 
+L 1603 1997 
+L 356 1997 
+L 356 2522 
+L 1603 2522 
+L 1603 3769 
+L 2134 3769 
+L 2134 2522 
+L 3381 2522 
+L 3381 1997 
+L 2134 1997 
+L 2134 741 
+L 1603 741 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#ArialMT-2b"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="LineCollection_1"/>
+   <g id="patch_3">
+    <path d="M 7.2 204.221229 
+L 21.15 204.221229 
+L 35.1 204.221229 
+L 35.1 10.181229 
+L 21.15 10.181229 
+L 7.2 10.181229 
+L 7.2 204.221229 
+z
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+</svg>

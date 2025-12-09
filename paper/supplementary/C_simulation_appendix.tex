@@ -1,0 +1,113 @@
+\section{Detailed description of simulations} \label{sec:more-simulations}
+
+\subsection{Mathematical description of the simulation algorithm} \label{sec:simulation-algorithm}
+
+In this section, we describe the mathematical equations behind our approach for simulating EEG data. The following steps were performed:
+
+\begin{enumerate}
+    \item \textit{Noise sources.} We placed $N_{noise}=\simNumNoiseSources$ point-like sources at randomly selected locations within the source space. Power-law noise with the exponent of 1 was used as a waveform of activity for each noise source $\vect{s}_i^{noise}(t), i \in [1, N_{noise}]$. The noise was generated using the algorithm of \cite{TimmerKoenig1995}, as implemented in the \texttt{colorednoise} Python package.
+
+    \item \textit{Sources of alpha activity.} We placed either point-like or patch-like sources of alpha activity in each ROI of the DK parcellation. The total number of alpha sources $N_{alpha}$ was therefore equal to the number of ROIs $N_R$. To obtain waveforms of oscillatory activity $\vect{s}_j^{alpha}(t)$ for each alpha source $j \in [1, N_{alpha}]$, we generated white noise and filtered it in \tocheck{$\fminAlphaHz$-$\fmaxAlphaHz$} Hz range using an 8th order Butterworth filter. In the case of patch-like sources, the time courses of activity for all vertices belonging to one source had identical waveforms and zero delays between each other.
+
+    \item \textit{Connectivity.} To set ground-truth connectivity between a pair of sources (denoted as 1 and 2), we used the following approach. First, a constant phase delay $\Delta \varphi$ was applied to the activity waveform of the first source $s_1^{alpha}(t)$ via the Hilbert transform. In the equations below, $A_1(t)$ and $\varphi_1(t)$ denote the instantaneous amplitude and phase, while $j$ stands for the imaginary unit:
+    \begin{align}
+        s_1^{alpha}(t) &\equiv \Real\left\{A_1(t) \cdot \exp\left( j \varphi_1(t) \right)\right\} \\
+        s_1^{shift}(t) &= \Real\left\{A_1(t) \cdot \exp\left( j \varphi_1(t) + j \Delta \varphi \right)\right\}
+    \end{align}
+
+    To control the coherence between the sources, we mixed the shifted version of the original waveform with a specific amount of white noise $n(t)$. The signal-to-noise ratio (SNR) $\gamma_c$ in \tocheck{$\fminAlphaHz$-$\fmaxAlphaHz$} Hz range determines the resulting coherence $c_{12}$ between the original waveform and such mixture \citep{BendatPiersol2010}:
+    \begin{equation}
+        \gamma_c = \frac{\Var_{\text{8-12 Hz}}\left( s_1^{shift}(t) \right)}{\Var_{\text{8-12 Hz}}\left( n(t) \right)}
+    \end{equation}
+    \begin{equation}
+        c_{12} = \sqrt{\frac{\gamma_c}{1 + \gamma_c}}
+    \end{equation}
+
+    The required SNR can be derived from the desired coherence $c_0$ as follows:
+    \begin{equation}
+        \gamma_{c0} = \frac{c_{0}^2}{1 - c_{0}^2}
+    \end{equation}
+
+    To obtain such an SNR, the amplitude of the shifted waveform needs to be adjusted by the following factor:
+    \begin{equation}
+        f_{c} = \sqrt{\frac{\gamma_{c0} \cdot \Var_{\text{8-12 Hz}}\left( n(t) \right)}{\Var_{\text{8-12 Hz}}\left( s_1^{shift}(t) \right)}}
+    \end{equation}
+
+    The final waveform of the second source is then defined as:
+    \begin{equation}
+        s_2^{alpha}(t) = f_{c} \cdot s_1^{shift}(t) + n(t)
+    \end{equation}
+
+    We used depth-first search to traverse the connectivity graph and ensure that all waveforms are set correctly when multiple connectivity edges need to be simulated.
+
+    \item \textit{Normalization.} Generated noise waveforms were divided by their standard deviation (SD) over time to normalize the SD across sources:
+
+    \begin{equation}
+        \tilde{s}_i^{noise}(t) = \frac{s_i^{noise}(t)}{\sqrt{\Var(s_i^{noise})}}
+    \end{equation}
+
+    Waveforms of alpha activity were also normalized to have the same SD for all sources. To make the total variance of patch activity independent of the number of vertices in the patch ($N_v$), we also included the number of vertices in the normalization ($N_v = 1$ for point sources). Finally, in some experiments, we manipulated the spatial distribution of the SD of alpha activity (e.g., to mimic the dominance of parieto-occipital alpha sources, which is typical in resting-state recordings). To achieve this, the waveforms of alpha activity were scaled by the desired SD $\sigma$ that corresponded to the location of the source (or its center in case of patches). The combined normalization is therefore:
+
+    \begin{equation}
+        \tilde{s}_j^{alpha}(t) = \frac{s_j^{alpha}(t)\cdot \sigma}{\sqrt{\Var(s_j^{alpha}) \cdot N_v}}
+    \end{equation}
+
+    \item \textit{Signal-to-noise ratio (SNR).} We adjusted the SNR of alpha activity based on the approach described in \cite{HaufeEwald2019}. First, we projected the activity of all noise and point-/patch-like sources to sensor space using the corresponding parts of the lead field matrix ($\mat{L}_i$ contains only columns that correspond to the vertices of the $i$-th source):
+    \begin{align}
+        \vect{x}^{noise}(t) &= \sum\limits_{i=1}^{N_{noise}} \mat{L}_i \tilde{s}_i^{noise}(t) \\
+        \vect{x}^{alpha}(t) &= \sum\limits_{j=1}^{N_{alpha}} \mat{L}_j \tilde{s}_j^{alpha}(t)
+    \end{align}
+
+    Then, we calculated the mean variance of the projected noise and alpha activity across $N_C$ sensors after filtering the time series in \tocheck{$\fminAlphaHz$-$\fmaxAlphaHz$} Hz range:
+    \begin{align}
+        P_{noise} &= \frac{1}{N_C} \sum\limits_{i=1}^{N_C} \Var_{\text{8-12 Hz}}(x_i^{noise}(t)) \\
+        P_{alpha} &= \frac{1}{N_C} \sum\limits_{j=1}^{N_C} \Var_{\text{8-12 Hz}}(x_j^{alpha}(t))
+    \end{align}
+
+    The global SNR of alpha relative to 1/f activity $\gamma_{alpha}$ was then defined as:
+
+    \begin{equation} \label{eq:sim-global-snr}
+        \gamma_{alpha} = \frac{P_{alpha}}{P_{noise}}
+    \end{equation}
+
+    To obtain the target SNR $\gamma_0$, we scaled the amplitude of alpha activity by the following factor:
+
+    \begin{equation}
+        f_{\text{SNR}} = \sqrt{\frac{\gamma_0 \cdot P_{noise}}{P_{alpha}}}
+    \end{equation}
+
+    \item \textit{Projecting to sensor space.} The waveforms of alpha activity and 1/f noise were projected to sensor space and summed:
+
+    \begin{equation}
+        \vect{x}^{brain}(t) = f_{\text{SNR}} \cdot \sum\limits_{j=1}^{N_{alpha}} \mat{L}_j \tilde{s}_j^{alpha}(t) + \sum\limits_{i=1}^{N_{noise}} \mat{L}_i \tilde{s}_i^{noise}(t)
+    \end{equation}
+
+    Finally, we generated multivariate white noise $\vect{x}^{sensor}(t)$ to model sensor noise and added it to the projected brain activity to obtain the simulated data $\vect{x}(t)$:
+
+    \begin{equation} \label{eq:sim-sensor-noise}
+        \vect{x}(t) = \sqrt{1 - \gamma_{sensor}} \cdot \vect{x}^{brain}(t) + \sqrt{\gamma_{sensor}} \cdot \frac{P_{brain}}{P_{sensor}} \cdot \vect{x}^{sensor}(t)
+    \end{equation}
+    \begin{align}
+        P_{brain} &= \frac{1}{N_C} \sum\limits_{i=1}^{N_C} \Var_{\text{8-12 Hz}}(x_i^{brain}(t)) \\
+        P_{sensor} &= \frac{1}{N_C} \sum\limits_{j=1}^{N_C} \Var_{\text{8-12 Hz}}(x_j^{sensor}(t))
+    \end{align}
+
+    The parameter $\gamma_{sensor}$ controls the fraction of total power of the simulated data that is explained by sensor noise.
+\end{enumerate}
+
+\subsection{Inferred values of simulation parameters} \label{sec:inferred_params}
+
+We estimated the values of several simulation parameters (global SNR, spatial distribution of source power, and sensor noise level) using resting-state recordings from the LEMON dataset. This approach aimed to ensure that reasonable values were used in the experiments. The estimation approach aligns with the role of each parameter in the simulations.
+
+Global SNR was estimated from the average power spectral density (PSD) across all channels (Welch's method, 0.5~Hz frequency resolution, 50\% overlap). SNR was defined as the ratio of power in the alpha band (\tocheck{$\fminAlphaHz$--$\fmaxAlphaHz$}~Hz) to the mean power in the flanking frequency bands: 5--7~and 13--15~Hz (Fig. \ref{fig:inferred_params}-\tocheck{A}). Fig. \ref{fig:inferred_params}-\tocheck{B} shows the obtained distributions of global SNR in the eyes-open (EO) and eyes-closed (EC) conditions. Median global SNR was equal to \tocheck{$\inferEOSNR$}~(\tocheck{$\inferEOSNRdB$}~dB) and \tocheck{$\inferECSNR$}~(\tocheck{$\inferECSNRdB$}~dB) for EO and EC conditions, respectively. In simulations, we used an SNR of \tocheck{$\simGlobalSNR$} (\tocheck{$\simGlobalSNRdB$} dB) as the default. We considered two additional SNR levels (-4.8 and 0 dB) to test the effect of SNR on the relationship between CTF ratio and extraction quality.
+
+To introduce unequal variance of the activity of simulated sources, we used the grand-average values of source-space alpha power. For each subject, the sensor-space data were filtered in \tocheck{$\fminAlphaHz$--$\fmaxAlphaHz$}~Hz using an 8th order Butterworth filter. Estimates of source power were obtained using eLORETA and normalized to remove between-subject differences in total power before averaging. The resulting power maps for EO and EC conditions are shown in Fig. \ref{fig:inferred_params}-\tocheck{C}. As could be expected, occipital and sensorimotor areas show the strongest activity.
+
+Finally, we obtained two estimates for the level of sensor-space noise. The first one is based on the amplifier noise floor, which appears as a plateau in the PSD of the raw data at high frequencies \citep{Scheer2006}. Since the amplifier used for recording the LEMON data had a built-in low-pass filter at 1 kHz, we used the value of power at \tocheck{$\inferFamp$}~Hz as an upper bound of the amplifier noise (Fig. \ref{fig:inferred_params}-\tocheck{D}). As shown in Fig. \ref{fig:inferred_params}-\tocheck{E}, amplifier noise never exceeded 1\% of total alpha power. The second estimate of the noise level was obtained via a \tocheck{$\inferCVfolds$}-fold spatial cross-validation \citep{Hashemi2021}. This approach allows estimating the amount of variance that cannot be explained by the forward and inverse models (in our case, eLORETA). Such residual variance might originate from sources of activity other than the brain (e.g., muscles). For cross-validation, we used the first \tocheck{$\inferCVMinutes$}~minutes of preprocessed data for each subject and varied the regularization parameter $\lambda$ from \tocheck{$\inferCVregMin$}~to \tocheck{$\inferCVregMax$}~in \tocheck{$\inferCVregSteps$}~log-spaced steps. The lowest residual variance across all values of $\lambda$ was taken as the noise level. Fig. \ref{fig:inferred_params}-\tocheck{F} shows the distribution of noise level relative to the subject-specific alpha power, with \tocheck{$\inferEOnoiseCV$}\% and \tocheck{$\inferECnoiseCV$}\% as median values for EO and EC conditions, respectively. In simulations, we set the sensor noise power to 1\%, 10\%, and 25\% of the total power to test its effect on the relationship between the CTF ratio and extraction quality.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figCsupp_inferred_params.png}
+    \caption{Simulation parameters inferred using the resting-state data from the LEMON dataset. (A) Global SNR was estimated as the ratio of power in the alpha band (red) to the mean power in the flanking frequency bands (gray). (B) Histograms of global SNR values in eyes-open (EO) and eyes-closed (EC) conditions. Dashed lines show the values of global SNR that were used in simulations. (C) Spatial distribution of the grand-average source-space alpha power. (D) Power at $\inferFamp$~Hz was used as the upper bound of amplifier noise. (E) The power of amplifier noise did not exceed 1\% relative to the total alpha power for any participant. (F) Estimates of noise level based on spatial cross-validation in EO and EC conditions.}
+    \label{fig:inferred_params}
+\end{figure}

@@ -1,0 +1,67 @@
+\section{Discussion} \label{sec:discussion}
+
+% Promises of CTF
+
+In this study, we applied the cross-talk function (CTF) to estimate and illustrate the effects of remaining field spread (RFS) on the extraction of M/EEG activity from regions of interest (ROIs) and on the estimation of inter-regional connectivity. We first showed that CTF can be used to evaluate potential contributions of all sources to the extracted ROI time series. Then, we used the CTF ratio to assess the fidelity of the extracted ROI time series and to derive its ROI-specific theoretical upper limit for a given lead field and parcellation. The analysis of the upper limit of the CTF ratio across ROIs highlighted the non-uniform nature of the RFS, with lower CTF ratios and thus poorer extraction of activity in regions farther from the recording sensors. These results were validated in simulations and complemented by analyses of inter-regional connectivity in real data. Altogether, the results suggest that CTF can serve as a diagnostic tool for evaluating and comparing pipelines for the extraction of ROI activity.
+
+% Caveats of CTF
+
+However, it is important to note that CTF reflects only the potential contributions of sources, while their actual contributions also depend on the source covariance matrix \citep{Lütkenhöner1997}. The majority of the presented analyses assumed distributed source activity with limited information about the ground-truth source locations, which is typical of resting-state data. Therefore, conclusions may differ for source configurations with few focal sources, e.g., corresponding to different evoked responses. In that sense, CTF remains close to a spatial filter defined in source space. Multiplying it by the source covariance matrix yields a source-space spatial pattern that can be safely interpreted \citep{Haufe2014}.
+
+\subsection{Non-uniformity of the RFS across the cortex}
+
+% Wrap-up on non-uniformity in activity and connectivity estimation
+
+The analysis of the upper limit of the CTF ratio across ROIs highlights the non-uniform nature of RFS. Regions farther from the recording sensors generally exhibit a lower CTF ratio and, hence, poorer fidelity of the extracted time series. Similar effects are observed for the estimation of inter-regional connectivity, where regions with a low CTF ratio were more likely to display ghost interactions. These results imply that connectivity edges in 'all-to-all' analyses \citep{Palva2012} are not represented uniformly, which should be taken into account when interpreting the results.
+
+% Reasons for this effect
+
+The observed pattern of the CTF ratio across the cortex can be explained by the overlap of the lead fields of sources from different ROIs \citep{Krishnaswamy2017}. For example, suppose we try to extract activity from the insula. In that case, our spatial filter will likely also capture the activity of sources in the temporal lobe with a similar lead field. Assuming similar source strengths in both regions, activity in the temporal cortex will always contribute more to the extracted signal, resulting in a low CTF ratio for the insula. In source localization, this effect is mitigated by re-weighting the sources according to the distance to the sensors \citep{Lin2006}. However, such an approach would not help when extracting time series of activity, since weights (i.e., a spatial filter) can only be applied to different channels. Unless the spatial filter is designed to suppress the activity of specific sources, they will continue to contribute to the extracted time series \citep{Hauk2011, deCheveigne2025}.
+
+% Implications
+
+Due to the significant variability in upper limits of CTF ratio across the cortex (Fig. \ref{fig:ctf-metrics}\tocheck{A}), it is crucial to take the non-uniformity of RFS into account when interpreting the results of ROI-based analyses. As an extreme approach, regions with a low CTF ratio can be excluded from the analysis. Otherwise, the findings for such ROIs need to be interpreted with caution and thoroughly checked for potential RFS from other ROIs. If possible, one can design experimental paradigms so that the expected contribution of interfering sources is negligible. Such approaches would ensure that variations in measured parameters within low ratio areas are not merely a reflection of corresponding differences in areas with high CTF ratios.
+
+\subsection{Optimizing parcellations for M/EEG analysis}
+
+% ROI size in parcellations vs. effective ROI size
+
+The theoretical upper limit of the CTF ratio was positively correlated with the size of the ROI (Fig. \ref{fig:ctf-metrics}\tocheck{E}). This result implies that even if the researchers choose a parcellation with smaller ROIs, the effective ROI size (in terms of separation of activity from other areas) remains high for a given sensor configuration. With more sensors, the upper limit of the CTF ratio increased, but the increase was not uniform across brain areas. In addition, the effect saturated as the number of sensors increased, suggesting that the spatial density of sensors is also a critical constraint \citep{Srinivasan1998}.
+
+% CTF ratio as a metric to consider when optimizing parcellations
+
+Recent studies have also optimized existing parcellations for use with M/EEG, acknowledging that ROI definitions based on anatomy or cellular architecture might not be optimal in the context of field spread \citep{Farahibozorg2018, Tait2021, Sommariva2025}. These studies also used CTF and its derivatives to generate parcellations and/or evaluate the performance of specific extraction pipelines for ROIs from different parcellations. In that regard, the ROI-specific theoretical limit of the CTF ratio might provide a pipeline-agnostic measure for comparing parcellations and help identify which areas benefit most from modified definitions.
+
+\subsection{CTF as a diagnostic tool for extraction pipelines}
+
+% Recap on the problem of multiple pipelines
+
+Recently, the question of which of the many existing pipelines for extracting ROI activity to use has become more relevant. This variability in extraction pipelines was shown to affect the results of real-data analyses \citep{Mahjoory2017, Brkic2023, Kapralov2024}. Simulation studies \citep{Pellegrini2023, Brkic2023} provide an opportunity to compare pipelines objectively, but the results may depend on the specifics of the simulations. In this context, CTF in general and the results presented in this study in particular may help better understand the differences between RFS patterns across extraction pipelines and in choosing a suitable pipeline for the planned analysis. As shown in simulations, CTF-based estimates of extraction quality depend on a good prior for the source covariance matrix. Without it, CTF estimates may be less precise for a particular analysis, but should still provide meaningful information on average.
+
+% Room for optimization
+
+In addition, we showed that commonly used methods do not reach the theoretical upper limit of the CTF ratio, at least in part due to the applied regularization. Spatial filters that optimize the CTF ratio can be obtained analytically \citep{Gross1999, GrosseWentrup2009}, but improvements in the CTF ratio can also result from overfitting to the head model used in the underlying calculations. The importance of this effect may depend on whether a template or an individual MRI is used to create the head model, but this requires further investigation.
+
+\subsection{CTF explains potential effects of RFS on connectivity in real data}
+
+% CTF explained effects better than distance
+
+Using real data, we considered two scenarios that illustrate the potential effects of RFS on connectivity -- spurious and ghost interactions. The results show that both the CTF and the distance between ROIs captured general trends of spurious coherence (SC) in resting-state data and ghost interactions in the RIFT paradigm. However, only the CTF could additionally explain the differences between the extraction pipelines. In addition, a high amount of RFS may come even from distant areas (Fig. \ref{fig:example-connectivity}), suggesting that CTF might provide a better explanation of the RFS than the distance between ROIs. Below, we discuss potential applications of the CTF in connectivity analyses. While we mainly focused on coherency in the analytical derivations, the effects of RFS should be similar for other commonly used connectivity measures \citep{Nolte2020}.
+
+% Spurious coherence - implications
+
+A well-known approach for avoiding spurious interactions is to use robust connectivity measures that are sensitive only to interactions with non-zero phase lag. However, these measures inevitably also ignore all genuine zero-lag interactions. With CTF, it is possible to evaluate the expected amount of SC for each connection (Eq. \ref{eq:spurious-coherence}) and decide whether non-robust measures such as coherence could also be safely used in a particular analysis. Alternatively, one can construct a null coherence matrix assuming no genuine underlying connections and compare it with or subtract it from the one obtained from real data \citep{Palva2012, Westner2024}. If coherence values are compared between several groups or conditions, differences in source power can also be accounted for by specifying the source covariance matrix (e.g., from a grand-average eLORETA reconstruction).
+
+% Ghost interactions - implications
+
+With the RIFT dataset, we observed a reasonably good fit for a CTF-based model with two sources located in V1 of both hemispheres, consistent with the previous literature on generators of SSVER \citep{DiRusso2007}. On the one hand, this result shows that CTF can be used to account for ghost interactions when analyzing real data, potentially, in combination with other methods (e.g., the hyperedge clustering method; \cite{Wang2018}). On the other hand, it suggests that steady-state responses may serve as a benchmark for connectivity methods with a relatively well-defined ground truth, which can be manipulated by changing the properties of the presented stimuli \citep{Herrmann2001, Spaak2024_paper}.
+
+\subsection{Limitations}
+
+% Limitations of our study
+
+The current study has several limitations. First, we restricted the scope of the performed simulations to ensure computational feasibility. For example, we focused only on the DK parcellation, assumed fixed source orientations, and performed stepwise manipulations of the source covariance matrix (Experiments 1-4b) without considering all possible combinations of the investigated factors. Second, we considered only one source per ROI. In the case of multiple sources, the aggregation problem would still need to be solved even if we had access to the ground-truth time series, so we limited the scope to the effects of RFS from other brain areas. Finally, although we used different source grids for simulation and reconstruction, both grids were constructed from the same anatomical MRI data. Therefore, the effect of the source of anatomical data (template vs. individual MRI) on the CTF ratio remains to be explored.
+
+% Cases not covered by CTF
+
+There are also two critical limitations of the CTF-based evaluation of ROI extraction pipelines. As already mentioned, CTF shows only the potential, not the actual, contributions of sources to the extracted signal \citep{Lütkenhöner1997}. In addition, the idea of an equivalent spatial filter applies only to combinations of linear forward and inverse models. Approaches based on a non-linear transformation of the reconstructed source time series (power, connectivity) that is averaged across all vertices of the ROI are not compatible with CTF but performed well in some simulations \citep{Brkic2023}.

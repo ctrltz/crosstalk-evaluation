@@ -1,0 +1,36 @@
+\section{Overview of methods for extraction of ROI activity} \label{sec:review}
+
+We performed a literature review to provide an overview of existing pipelines for extracting ROI activity. We identified\footnote{We used the PubMed database and the following search query: (EEG OR MEG OR electroencephalograph* OR magnetoencephalograph*) AND source AND (connectivity OR coupling OR atlas OR parcellation OR ROI) AND Journal Article[Publication Type] AND English[Language]. Preprints were excluded from the analysis.} \reviewNumIncluded~papers published between \reviewMinYear~and \reviewMaxYear~that performed ROI extraction via the two-step approach: inverse modeling followed by ROI aggregation. In these papers, we collected occurrences of various inverse and aggregation methods and tracked the brain parcellations used.
+
+The results of the review are presented in Fig. \ref{fig:literature-review}. Both beamformers and variations of the minimum-norm estimate are used, with sLORETA \citep{sLORETA_PascualMarqui2002}, LCMV \citep{LCMV_VanVeen1997}, and eLORETA \citep{eLORETA_PascualMarqui2007} being the most frequently used approaches (Fig. \ref{fig:literature-review}-\tocheck{A}). For ROI aggregation, averaging, the first principal component, and the time course of the ROI center of mass (centroid) are the most commonly used options (Fig. \ref{fig:literature-review}-\tocheck{B}). Averaging with sign flip is also used, but slightly less often. When looking at the combinations of methods (i.e., pipelines) that are used (Fig. \ref{fig:literature-review}-\tocheck{D}), it becomes clear that there is no consensus upon which approaches to use, and almost every combination of methods appears at least in one study. Finally, most studies use parcellations based on anatomical (DK, \cite{DesikanKilliany2006}; AAL, \cite{AAL_TzourioMazoyer2002}; DKT, \cite{DKT_Klein2012}; \cite{Destrieux2010}) or cytoarchitectonic \citep{Brodmann1909} features (Fig. \ref{fig:literature-review}-\tocheck{C}). Functional \citep{Schaefer2018} and multimodal (HCP, \cite{Glasser2016}) parcellations are used to a lesser extent.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figAsupp-literature-review.png}
+    \caption{Literature review of pipelines for the extraction of activity from regions of interest (ROIs). Only options used by at least \reviewMinFreq~studies are shown. (A) Inverse modeling methods used in the literature, colored by their family. (B) Approaches for ROI aggregation. See Table \ref{tab:weights} for the detailed description. (C) Parcellations that are used to define ROIs. The parcellations are grouped by the feature types used to define them. (D) Sankey diagram of pipelines for ROI extraction shows a lack of consensus in the literature. Each pipeline connects one modality (MEG/EEG), one inverse method, and one approach for ROI aggregation. Line width denotes the number of pipelines that use each combination. Only pipelines with complete information are shown.}
+    \label{fig:literature-review}
+\end{figure}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{lcp{7 cm}}
+        \toprule
+        Name & Weights & Explanation \\
+        \midrule
+        \multirow{1}{*}[-0.7em]{mean} & \multirow{1}{*}{$w^{agg}_i = \left\{ \begin{array}{c} 1, i \in I^{in} \\ 0, \text{otherwise} \end{array} \right.$} & Averaging reconstructed time series of all sources within the ROI \\
+        \midrule
+        \multirow{1}{*}[-8.5em]{mean-flip} & \multirow{1}{*}[-7.8em]{$w^{agg}_i = \left\{ \begin{array}{c} 1~\text{or}~-1, i \in I^{in} \\ 0, \text{otherwise} \end{array} \right.$} & Depending on the folding of the cortex, some dipoles may have opposite orientations, thus cancelling each other's activity during averaging. With this approach, first, the dominant orientation of sources within the ROI is found via SVD. A sign flip is applied to the time series of sources whose orientation yields a negative dot product with the dominant one. After the sign flip, the time series of all the sources within the ROI are averaged. \\
+        \midrule
+        \multirow{1}{*}[-1.5em]{centroid} & \multirow{1}{*}[-0.8em]{$w^{agg}_i = \left\{ \begin{array}{c} 1, i = i_{c} \\ 0, \text{otherwise} \end{array} \right.$} & Use activity from the source $i_c$, which is the closest to the ROI center of mass, to represent the whole region \\
+        \midrule
+        \multirow{1}{*}[-0.8em]{fidelity} & & Fidelity-optimized weighting operator \citep{Korhonen2014} \\
+        \midrule
+        \multirow{1}{*}[-2.4em]{SVD} & & Weights that allow extracting the first component of the singular value decomposition of the reconstructed source time series \\
+        \bottomrule
+    \end{tabular}
+    \caption{Approaches of aggregation of reconstructed time series of activity for sources within the ROI. $I^{in}$ denotes a set of indices of sources that belong to the considered ROI. Abbreviations: ROI --- region of interest, SVD --- singular value decomposition.}
+    \label{tab:weights}
+\end{table}
+
+% NOTE: this forces Table S1 to appear before Table S2
+\pagebreak

@@ -1,0 +1,235 @@
+\section{Detailed theoretical derivations} \label{sec:more-theory}
+
+\subsection{Notation}
+
+Table \ref{tab:notation} lists all variables and operators that appear in the theoretical derivations.
+
+\begin{longtable}{ccp{9 cm}}
+    \toprule
+    Symbol & Shape & Description \\
+    \midrule
+    $\mathbb{R}$ & & The set of real numbers \\
+    $\mathbb{E}(x)$ & & The expected value of $x$ \\
+    $\langle x \rangle$ & & Average value of $x$ over multiple data segments \\
+    $\delta_{ij}$ & & Kronecker's delta \\
+    \midrule
+    $\vect{x}^T,~\mat{X}^T$ & & Transpose of the vector $\vect{x}$ or matrix $\mat{X}$ \\
+    $x_i$ & & $i$-th element of the vector $\vect{x}$ \\
+    $z^*$ & & Complex conjugate of $z$ \\
+    $||\vect{x}||$ & & Euclidean norm of the vector $\vect{x}$ \\
+    $\Var(x)$ & & Variance of $x$ over time \\
+    $\Cov(x, y)$ & & Covariance of $x$ and $y$ over time \\
+    $\Corr(x, y)$ & & Correlation of $x$ and $y$ over time \\
+    $\text{Diag}\{\vect{x}\}$ & & Diagonal matrix containing the elements of vector $\vect{x}$ \\
+    $\text{eig}[\mat{A}, \mat{B}]$ & & Generalized eigenvalue decomposition of matrices $\mat{A}$ and $\mat{B}$ \\
+    $\Imag\{z\}$ & & Imaginary part of a complex number $z$ \\
+    \midrule
+    $N_C$ & & The number of M/EEG sensors \\
+    $N_S$ & & The number of source dipoles in the considered grid \\
+    $N_R$ & & The number of ROIs in the considered parcellation \\
+    $N_{in}$ & & The number of source dipoles in the considered ROI \\
+    $N_{j}$ & & The number of source dipoles in the $j$-th ROI \\
+    \midrule
+    $\vect{x}(t)$ & $N_C \times 1$ & M/EEG measurements at time point $t$ \\
+    $\vect{s}(t)$ & $N_S \times 1$ & Ground-truth source activity at time point $t$ \\
+    $\vect{n}(t)$ & $N_C \times 1$ & Sensor (e.g., measurement) noise at time point $t$ \\
+    $\hat{\vect{s}}(t)$ & $N_S \times 1$ & Reconstructed source activity at time point $t$ \\
+    $\hat{r}(t)$ & & Extracted ROI activity at time point $t$ \\
+    \midrule
+    $\mat{L}$ & $N_C \times N_S$ & The lead field (assuming fixed dipole orientations) \\
+    $\mat{L}_{in}$ & $N_{in} \times N_S$ & Submatrix of the leadfield that corresponds to the considered ROI \\
+    $\mat{W}$ & $N_S \times N_C$ & Inverse operator or stacked beamformer weights \\
+    $\vect{w}_{agg}$ & $1 \times N_S$ & Weights used for aggregation of ROI activity \\
+    $\vect{w}$ & $1 \times N_C$ & Spatial filter for extraction of ROI activity \\
+    $\vect{w}^*$ & $1 \times N_C$ & Spatial filter that optimizes the CTF ratio \\
+    \midrule
+    $\mat{K}$ & $N_S \times N_S$ & Resolution matrix \\
+    $\vect{k}(\vect{w})$ & $1 \times N_S$ & Cross-talk function (CTF) of the spatial filter $\vect{w}$ \\
+    $\vect{k}_{in}(\vect{w})$ & $1 \times N_{in}$ & Subvector of CTF that corresponds to the considered ROI \\
+    $\tilde{\vect{k}}(\vect{w})$ & $1 \times N_S$ & Normalized CTF of the spatial filter $\vect{w}$ \\
+    $R(\vect{w})$ & & ROI-specific CTF ratio of the spatial filter $\vect{w}$ \\
+    \midrule
+    $P_i$, $\pxx{s_i}$ & & Power/variance of the ground-truth activity of $i$-th source \\
+    $P_{\hat{r}}$, $\pxx{\hat{r}}$ & & Power/variance of the extracted ROI time series \\
+    $\mat{\Sigma}_s$ & $N_S \times N_S$ & Source covariance matrix \\
+    $\mat{\Sigma}_{in}$ & $N_{in} \times N_{in}$ & Submatrix of the source covariance matrix that corresponds to the considered ROI \\
+    $\mat{\Sigma}_n$ & $N_C \times N_C$ & Noise covariance matrix \\
+    $\mat{\Sigma}_x$ & $N_C \times N_C$ & Data covariance matrix \\
+    \midrule
+    $\vect{x}(f)$ & $N_C \times 1$ & Fourier component of M/EEG measurements at frequency $f$ \\
+    $\vect{s}(f)$ & $N_S \times 1$ & Fourier component of ground-truth source activity at frequency $f$ \\
+    $\hat{r}(f)$ & & Fourier component of extracted ROI activity at frequency $f$ \\
+    \midrule
+    $\hat{c}_{ij}^r$ & & Estimated coherency between the time series of activity in ROIs $i$ and $j$ \\
+    $c_{ij}^s$ & & Ground-truth coherency between the time series of activity of sources $i$ and $j$ \\
+    $c_{ij}^{spurious}$ & & Spurious coherence between ROIs $i$ and $j$ \\
+    $\mat{M}^{ij}$ & $N_S \times N_S$ & Mixing weights for ImCoh \\
+    \midrule
+    $\mat{C}$ & $N_R \times N_R \times N_R \times N_R$ & Average contribution weights in terms of ImCoh \\
+    $\mat{C}^{own}$ & $N_R \times N_R$ & Average ImCoh contribution weights for own sources \\
+    $\mat{C}^{ratio}$ & $N_R \times N_R$ & Ratio of ImCoh contribution weights for own vs. all other sources \\
+    \bottomrule
+
+    \caption{\footnotesize Notation used throughout the theoretical derivations. The shape is only specified for vectors and matrices. Abbreviations: ROI --- region of interest, ImCoh --- imaginary part of coherency.}
+    \label{tab:notation}
+\end{longtable}
+
+\subsection{CTF ratio corresponds to the variance explained by ground-truth sources} \label{sec:extraction-quality}
+
+In the following, we evaluate the quality of the extracted time courses of ROI activity by computing the correlation between the ground truth activity of a target source that belongs to the ROI and the ROI time series $\hat{r}$ extracted with a spatial filter $\vect{w}$:
+
+\begin{equation}
+    \hat{r} = \vect{k} \vect{s} = \sum\limits_{i=1}^{N_S} k_i s_i
+\end{equation}
+
+If the activity of all sources has the same variance and no correlations ($\forall i, j~\Var(s_i) = \Var(s_j), \cov{s_i}{s_j} = \delta_{ij} \Var(s_i)$), the CTF ratio of the target source $m$ reflects the squared correlation (i.e., explained variance) between the ROI time series and the ground-truth source activity:
+
+\begin{equation}
+    \cov{\hat{r}}{s_m} = \sum\limits_{i=1}^{N_S} k_i \cdot \cov{s_i}{s_m} = \sum\limits_{i=1}^{N_S} k_i \delta_{im} \cdot \Var(s_m) = k_m \cdot \Var(s_m)
+\end{equation}
+
+\begin{equation}
+    \Var(\hat{r}) = \sum\limits_{i=1}^{N_S} \sum\limits_{j=1}^{N_S} k_i k_j \cdot \cov{s_i}{s_j} = \sum\limits_{i=1}^{N_S} \sum\limits_{j=1}^{N_S} k_i k_j \delta_{ij} \cdot \Var(s_i) = \sum\limits_{i=1}^{N_S} k_i^2 \cdot \Var(s_i)
+\end{equation}
+
+\begin{equation}
+    \corr{\hat{r}}{s_m} = \frac{\cov{\hat{r}}{s_m}}{\sqrt{\Var(\hat{r}) \cdot \Var(s_m)}} = \frac{k_m \Var(s_m)}{\sqrt{\sum\limits_{i=1}^{N_S} k_i^2 \Var(s_i) \cdot \Var(s_m)}} = \frac{k_m}{\sqrt{\sum\limits_{i=1}^{N_S} k_i^2}}
+\end{equation}
+
+\begin{equation}
+    \corrsq{\hat{r}}{s_m} = \frac{k_m^2}{\sum\limits_{i=1}^{N_S} k_i^2} = \frac{\vect{w} \vect{l_m} \vect{l_m}^T \vect{w}^T}{\vect{w} \mat{L} \mat{L}^T \vect{w}^T},
+\end{equation}
+
+\noindent where $\vect{l_m}$ is the column of the lead field matrix that corresponds to the target source $m$. The final form corresponds to the CTF ratio of the target source for a given spatial filter $\vect{w}$. If we assume that the target source can appear in a random location within an ROI, then the expected value of the explained variance is:
+
+\begin{equation}
+    \EV(\corrsq{\hat{r}}{s_m}) = \frac{1}{N_{in}} \frac{\sum\limits_{m \in ROI} k_m^2}{\sum\limits_{i=1}^{N_S} k_i^2} = \frac{1}{N_{in}} \cdot \frac{\vect{w} \mat{L}_{in} \mat{L}_{in}^T \vect{w}^T}{\vect{w} \mat{L} \mat{L}^T \vect{w}^T} \sim R(\vect{w})
+\end{equation}
+
+\subsection{Variations of the CTF ratio} \label{sec:ratio-variations}
+
+In this section, we show how prior knowledge about the covariance matrices of source activity ($\mat{\Sigma}_s \in \mathbb{R}^{N_S \times N_S}$) and noise ($\mat{\Sigma}_n \in \mathbb{R}^{N_C \times N_C}$) can be taken into account in the calculation of CTF ratio. Now, we also consider sensor noise $\vect{n}(t) \in \mathbb{R}^{N_C \times 1}$ (time dependency is again omitted for conciseness) in the calculations:
+
+\begin{equation}
+    \vect{x} = \mat{L} \vect{s} + \vect{n}
+\end{equation}
+
+The ROI time series can be extracted using a spatial filter $\vect{w}$:
+
+\begin{equation}
+    \hat{r} = \vect{w} \vect{x} = \vect{w} \mat{L} \vect{s} + \vect{w} \vect{n}
+\end{equation}
+
+The total power $P_{\hat{r}}$ of the extracted ROI time series $\hat{r}(t)$ is then equal to:
+
+\begin{equation}
+    P_{\hat{r}} = \vect{w} \mat{\Sigma}_x \vect{w}^T = \vect{w} \mat{L} \mat{\Sigma}_s \mat{L}^T \vect{w}^T + \vect{w} \mat{\Sigma}_n \vect{w}^T,
+\end{equation}
+
+\noindent where $\mat{\Sigma}_x \in \mathbb{R}^{N_C \times N_C}$ is the data covariance matrix. Assuming that the activity that comes from within and outside the ROI isn't correlated, the CTF ratio can be adjusted as follows:
+
+\begin{equation} \label{eq:ratio-cov}
+    R(\vect{w}) = \frac{\vect{w} \mat{L}_{in} \mat{\Sigma}_{in} \mat{L}_{in}^T \vect{w}^T}{\vect{w} \mat{L} \mat{\Sigma}_s \mat{L}^T \vect{w}^T + \vect{w} \mat{\Sigma}_n \vect{w}^T},
+\end{equation}
+
+\noindent where $\mat{\Sigma}_{in}$ is a sub-matrix of $\mat{\Sigma}_s$ containing only rows and columns that correspond to sources from the target ROI. The denominator of equation \ref{eq:ratio-cov} can also be evaluated using the data covariance matrix, making the CTF ratio data-dependent:
+
+\begin{equation} \label{eq:ratio-datacov}
+    R(\vect{w}) = \frac{\vect{w} \mat{L}_{in} \mat{\Sigma}_{in} \mat{L}_{in}^T \vect{w}^T}{\vect{w} \mat{\Sigma}_x \vect{w}^T}
+\end{equation}
+
+Objective function \ref{eq:ratio-datacov} was proposed by \cite{GrosseWentrup2009} to serve as a backup for data-dependent spatial filters in case of low signal-to-noise ratio (SNR).
+
+\subsection{Effect of the remaining field spread on estimation of inter-regional connectivity} \label{sec:connectivity_estimation}
+
+In this section, we switch to the frequency domain and, instead of the time courses ($\vect{x}(t), \vect{s}(t), \hat{r}(t)$), we consider their Fourier components at an arbitrary frequency $f$ (i.e., $\vect{x}(f), \vect{s}(f), \hat{r}(f)$). For conciseness, we omit the frequency from the following equations, since the presented equations hold for any frequency.
+
+We can use CTF to analyze the effects of remaining field spread on the estimates of coherency between ROIs. Let $\hat{r}_i$ and $\hat{r}_j$ be the Fourier components of the time series of M/EEG activity obtained for regions $i$ and $j$ with any linear spatial filter, then:
+\begin{equation}
+    \begin{split}
+        \hat{r}_i &= \vect{k}_i \vect{s} = \sum\limits_{l=1}^{N_S} k_{il} s_l \\
+        \hat{r}_j &= \vect{k}_j \vect{s} = \sum\limits_{m=1}^{N_S} k_{jm} s_m
+    \end{split}
+\end{equation}
+
+The cross-spectrum of $\hat{r}_i$ and $\hat{r}_j$ can be split into spurious (caused by the remaining field spread only) and genuine (driven by ground-truth source connectivity) parts:
+
+\begin{equation}
+    \begin{split}
+        \cs{\hat{r}_i}{\hat{r}_j}
+        &= \sum\limits_{l=1}^{N_S}\sum\limits_{m=1}^{N_S} k_{il} \cs{s_l}{s_m} k_{jm} = \\
+        &= \underbrace{\sum\limits_{l=m} k_{il} \pxx{s_l} k_{jm}}_{\text{spurious part}} + \underbrace{\sum\limits_{l \neq m} k_{il} \cs{s_l}{s_m} k_{jm}}_{\text{genuine part}}
+    \end{split}
+\end{equation}
+
+In the equation above, $\langle \cdot \rangle$ denotes averaging over data segments, which is commonly performed to get a more stable estimate of the cross-spectrum (e.g, in the Welch's method; \cite{Welch1967}). The \textit{spurious} part of the cross-spectrum does not depend on genuine interactions and is always present when sources contribute to the time series of both ROIs. If there are no ground-truth interactions on the source level, we can expect the following amount of spurious coherence:
+
+\begin{equation}
+    \hat{c}_{ij}^{spurious} = \frac{\left| \cs{\hat{r}_i}{\hat{r}_j}^{spurious} \right|}{\sqrt{\pxx{\hat{r}_i} \pxx{\hat{r}_j}}} = \frac{\left| \sum\limits_{l=1}^{N_S} k_{il} \pxx{s_l} k_{jl} \right|}{\sqrt{\left( \vect{k}_i \mat{\Sigma_s} \vect{k}_i^T \right) \cdot \left( \vect{k}_j \mat{\Sigma_s} \vect{k}_j^T \right)}},
+\end{equation}
+
+If we scale the CTF values by source amplitudes and normalize using the source covariance matrix, the spurious coherence can be expressed as the dot product of normalized CTFs:
+
+\begin{equation} \label{eq:ctf-norm}
+    \vect{\tilde{k}} = \frac{\vect{k} \cdot \Diag\{\sqrt{\pxx{s_i}}\}}{\sqrt{\vect{k} \mat{\Sigma}_s \vect{k}^T}}
+\end{equation}
+
+\begin{equation}
+    \hat{c}_{ij}^{spurious} = \left| \vect{\tilde{k}}_i \vect{\tilde{k}}_j^T \right|,
+\end{equation}
+
+\noindent where $\Diag\{\sqrt{\pxx{s_i}}\}$ is a diagonal matrix containing the amplitude of source activity for each source. The resulting equation for spurious coherence suggests that it depends on source amplitudes and the spatial overlap of the CTFs of spatial filters for ROIs $i$ and $j$.
+
+The \textit{genuine} part of the cross-spectrum is present if and only if there are ground-truth interactions between sources. For the imaginary part of the cross-spectrum, which is insensitive to the spurious part, it is possible to develop the equation further:
+
+\begin{align}
+    \Imag\{\cs{\hat{r}_i}{\hat{r}_j}\}
+    &= \sum\limits_{l \bm{\neq} m} k_{il} \Imag\{\cs{s_l}{s_m}\} k_{jm} = \\
+    &= \sum\limits_{l \bm{<} m} \left( k_{il} \Imag\{\cs{s_l}{s_m}\} k_{jm} + k_{im} \Imag\{\cs{s_m}{s_l}\} k_{jl} \right) = \\
+    &= \sum\limits_{l \bm{<} m} \Imag\{\cs{s_l}{s_m}\} \cdot \left( k_{il} k_{jm} - k_{im} k_{jl} \right) = \\
+    &= \sum\limits_{l \bm{<} m} \Imag\{c_{lm}^s\} \cdot \sqrt{\pxx{s_l} \pxx{s_m}} \cdot \left( k_{il} k_{jm} - k_{im} k_{jl} \right)
+\end{align}
+
+To obtain coherency, the cross-spectrum is normalized by the variance of the ROI time series:
+
+\begin{equation}
+    \Imag\{\hat{c}_{ij}^r\} = \frac{\Imag\{\cs{\hat{r}_i}{\hat{r}_j}\}}{\sqrt{\pxx{\hat{r}_i} \pxx{\hat{r}_j}}} = \sum\limits_{l \bm{<} m} \Imag\{c_{lm}^s\} \frac{\sqrt{\pxx{s_l} \pxx{s_m}} \cdot \left( k_{il} k_{jm} - k_{im} k_{jl} \right)}{\sqrt{\left( \vect{k}_i \mat{\Sigma_s} \vect{k}_i^T \right) \cdot \left( \vect{k}_j \mat{\Sigma_s} \vect{k}_j^T \right)}}
+\end{equation}
+
+Using the normalization introduced in Equation \ref{eq:ctf-norm}, we can extract and simplify the weights, with which the ground-truth ImCoh values between all pairs of sources get mixed into the estimated ImCoh between ROIs $i$ and $j$:
+
+\begin{align} \label{eq:imcoh-mixing}
+    \mat{M}^{ij} &= \vect{\tilde{k}}_i^T \vect{\tilde{k}}_j - \vect{\tilde{k}}_j^T \vect{\tilde{k}}_i \in \mathbb{R}^{N_S \times N_S} \\
+    \Imag\{\hat{c}_{ij}^r\} &= \sum\limits_{l \bm{<} m} \Imag\{c_{lm}^s\} M_{lm}^{ij}
+\end{align}
+
+\subsection{Non-uniform effects of RFS on the estimation of ImCoh}
+
+As shown in Eq. \ref{eq:imcoh-mixing}, the mixing of ImCoh is described by a separate matrix $\mat{M}^{ij}$ for each pair of ROIs $i$ and $j$. In this section, we analyze the average contribution weights (in terms of ImCoh) for sources from all ROIs for the Desikan-Killiany parcellation. First, we construct the contribution matrix $\mat{C} \in \mathbb{R}^{N_R \times N_R \times N_R \times N_R} = [C_{ijkl}]$ as follows:
+
+\begin{equation}
+    C_{ijkl} = \frac{1}{N_k N_l} \sum\limits_{m \in \text{ROI}_k} \sum\limits_{n \in \text{ROI}_l} |M_{mn}^{ij}|
+\end{equation}
+
+The value $C_{ijkl}$ describes how strongly (on average) the ground-truth values of ImCoh between all pairs of sources from ROIs $k$ and $l$ will contribute to the estimated ImCoh between ROIs $i$ and $j$. Importantly, it only shows the weight of the potential contribution, so if the ImCoh between sources is zero, there will be no actual contribution from these sources. The expected contribution weight of \textit{own} sources (the sources that belong to ROIs $i$ and $j$) is equal to:
+
+\begin{equation} \label{eq:recovery-own}
+    C_{ij}^{own} = C_{ijij}
+\end{equation}
+
+Ideally, own sources should contribute as much as possible so that we can attribute the results of the connectivity analysis to the respective ROIs. As shown in Fig. \ref{fig:imcoh-recovery}-\tocheck{B} for an extraction pipeline based on eLORETA and mean-flip, the contribution weights for ImCoh of own sources are not uniform across the cortex (assuming an identity source covariance matrix). ROIs with higher CTF ratio (see Fig. \ref{fig:imcoh-recovery}-\tocheck{A} for the color scheme) are generally expected to get a larger contribution in terms of ImCoh from their own sources.
+
+This effect becomes even clearer if one considers the ratio of contribution weights of own sources to the maximum contribution weights from sources that belong to all other pairs of ROIs:
+
+\begin{equation} \label{eq:recovery-ratio}
+    C_{ij}^{ratio} = \frac{C_{ij}^{own}}{\max\limits_{k,l \neq i,j}{C_{ijkl}}}
+\end{equation}
+
+This ratio is shown in Fig. \ref{fig:imcoh-recovery}-\tocheck{C}, implying that regions with low CTF ratio are more likely to extract ImCoh of other connections rather than their own ones ($C_{ij}^{ratio} < 1$, shown in light blue). The opposite can be expected for regions with a high CTF ratio.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/figBsupp_imcoh_recovery.png}
+    \caption{Recovery of ground-truth connectivity (measured with the absolute value of ImCoh) is not uniform across the cortex. The visualization of connectivity matrices is adapted from \cite{Liljestroem2015}. ROIs are grouped by the hemisphere they belong to and sorted by the CTF ratio within hemispheres. (A) CTF ratio achieved by the combination of eLORETA and mean-flip weights, averaged over homologous pairs of ROIs from both hemispheres. (B) Average contribution weights of ground-truth ImCoh from sources that belong to the target pair of ROIs (Eq. \ref{eq:recovery-own}) are not uniform across the cortex. Regions that exhibit a higher CTF ratio generally have higher weights for their own ground-truth connections. (C) Deeper regions with low CTF ratio (insula, medial walls of both hemispheres) are more sensitive to ground-truth ImCoh from other connections than their own ones, as indicated by values of contribution ratio (Eq. \ref{eq:recovery-ratio}) lower than 1. The opposite holds for ROIs close to the recording sensors, which have a higher CTF ratio.}
+    \label{fig:imcoh-recovery}
+\end{figure}

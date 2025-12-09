@@ -1,0 +1,10 @@
+xtick.labelsize: small
+xtick.color: gray
+ytick.labelsize: small
+ytick.color: gray
+
+axes.spines.top: False
+axes.spines.right: False
+
+font.family: sans-serif
+font.sans-serif: Arial, DejaVu Sans

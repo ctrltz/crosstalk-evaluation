@@ -1,0 +1,166 @@
+\section{Methods} \label{sec:methods}
+
+\subsection{Overview of the analyses}
+
+First, we performed two simulation experiments to illustrate the effects of remaining field spread (RFS) on the extraction of ROI activity (Experiment \tocheck{A}) and the estimation of inter-regional connectivity (Experiment \tocheck{B}). We then calculated the theoretical limits of the CTF ratio for commonly used parcellations and the CTF ratios achieved by several data-independent extraction pipelines. We also investigated the relationship between the theoretical limits of the CTF ratio, ROI features, and the number of recording sensors.
+
+To validate the link between the CTF ratio and the extraction of ROI activity, we simulated 61-channel EEG data with known ground-truth source activity and conducted several experiments (Experiments 1-4b) to test the effects of deviations from the default assumptions of unit variance and zero covariance between all sources. We used real EEG data from the LEMON dataset \citep{Babayan2019} to infer plausible values for the simulation parameters (e.g., the signal-to-noise ratio of oscillatory activity).
+
+Finally, we used CTF to explain the consequences of RFS in real data: the level of spurious coherence derived from the resting-state EEG data of the LEMON dataset \citep{Babayan2019} and ghost interactions using a publicly available MEG dataset from a rapid invisible frequency tagging (RIFT) experiment (later referred to as RIFT dataset; \cite{Spaak2024_dataset}).
+
+The analysis was mainly performed using Python \tocheck{\versionPython}~and the MNE-Python toolbox (v\tocheck{\versionMNE}; \cite{Gramfort2013, MNE_Larson2024}). The preprocessed data from the RIFT dataset were exported to Python using MATLAB R2023b~(The MathWorks, USA) and the FieldTrip toolbox (v20241025; \cite{Oostenveld2011}). The analysis workflow was described as a set of Snakemake rules \citep{Snakemake_Moelder}.
+
+\subsection{M/EEG recordings and preprocessing}
+
+\paragraph{Dataset 1 (LEMON)}
+
+The LEMON dataset \citep{Babayan2019} contains resting-state EEG recordings from 216 participants during 16 interleaved 1-minute blocks of the eyes-closed (EC) and the eyes-open (EO) conditions. Each condition lasted for 8 minutes in total. The EEG data were recorded with a BrainAmp MR plus amplifier using 61 channels placed according to the 10-10 system (locations are shown in Fig. \ref{fig:simulation-workflow}\tocheck{A}). For most steps, we used preprocessed data, which were available for 203 of 216 participants. Additionally, we used the raw data from the same participants to infer the level of amplifier noise. Three participants were excluded: two due to a mismatch in sampling frequency in the preprocessed data, and one due to missing raw data. The final sample included \tocheck{\lemonNumIncluded}~participants (\tocheck{\lemonNumMale}~male; \tocheck{\lemonNumFemale}~female; \tocheck{\lemonNumYoung}: 20--40 years old; \tocheck{\lemonNumOld}: 55--80 years old).
+
+Preprocessing was performed by the dataset authors and included band-pass filtering between 1 and 45 Hz with an 8th-order Butterworth filter, removal of bad channels and data segments, and removal of artifactual components (i.e., eye movements/blinks, muscle activity) identified through independent component analysis (ICA). After preprocessing, the average length of the usable recordings in the EO and EC conditions was \tocheck{\lemonEOMinutes}~and \tocheck{\lemonECMinutes}~minutes, respectively. For more details about the experimental setup and preprocessing, see \citep{Babayan2019}.
+
+\paragraph{Dataset 2 (RIFT)}
+
+The RIFT dataset \citep{Spaak2024_dataset} contains MEG recordings of 14 participants (8 female; 6 male; mean age: 26 years, SD: 6 years) during steady-state visual stimulation at frequencies above 60 Hz. Participants completed a discrimination task and a passive viewing task, with one or two stimuli presented concurrently on the screen. In addition, the experiment included four different types of luminance modulation for the presented stimuli. In the current study, we only used the data from the passive viewing task for one and two stimuli with full amplitude luminance and contrast tagging (types 1 and 4 in the original paper; \cite{Spaak2024_paper}) as both resulted in high levels of coherence between the evoked steady-state responses and the presented stimuli.
+
+MEG data were recorded using a 275-channel axial gradiometer MEG system (VSM/ CTF Systems, Coquitlam, British Columbia, Canada) in a magnetically shielded room. We used the preprocessed data, which were also available in the published dataset. Preprocessing included removal of artifactual data segments and MEG channels with excessive noise, downsampling to 600 Hz, and, finally, removal of ICA components associated with eye movements and cardiac activity. Following the authors of the dataset, we excluded two participants due to poor data quality, resulting in a final sample of 12 participants. For the analysis, we used the 0.2--1.2 s time window after the onset of the flickering stimulus. For more details about the experiment and preprocessing, see \citep{Spaak2024_paper}.
+
+\subsection{Forward model}
+
+For all analyses in source space, we used a forward model based on the fsaverage template MRI \citep{Fischl1999} and the precomputed boundary element method solution available in MNE-Python \citep{Gramfort2014}. Unless mentioned otherwise, a source space with \tocheck{\simOctVertices} vertices per hemisphere (\texttt{oct6} spacing in MNE-Python) was used. In simulations, we used an additional source space with \tocheck{\simIcoVertices} vertices per hemisphere (\texttt{ico4} spacing) to avoid the complete agreement between source spaces used for generating and reconstructing the simulated data, also known as the "inverse crime" \citep{KnoescheHaueisen2022}. The orientations of sources were fixed along the normal to the cortical surface. For most theoretical calculations and simulations, we used the 61-channel layout of the LEMON dataset with standard electrode positions. To illustrate the influence of the number of sensors on the theoretical limit of the CTF ratio, we additionally used Biosemi EEG layouts with 16, 32, 64, 128, and 256 sensors. For real-data analyses, we used the channel information provided in the LEMON and RIFT datasets.
+
+\subsection{Parcellations}
+
+Unless otherwise specified, we used the ROIs from the Desikan-Killiany parcellation (DK; \cite{DesikanKilliany2006}). Additionally, we considered several other parcellations based on the literature review (Supp. Mat. \ref{supp-sec:review}) and compatibility with MNE-Python: Destrieux \citep{Destrieux2010}, Schaefer (400 ROIs, \cite{Schaefer2018}), Brodmann areas \citep{Brodmann1909}, and Human Connectome Project (HCP, both original and combined versions; \cite{Glasser2016}) parcellations.
+
+To illustrate the factors that influence the theoretical limit of the CTF ratio for a given ROI, we computed the average distance from the sources within the ROI to the outer skull surface as well as the area of the cortical surface that is covered by the ROI.
+
+\subsection{Extraction of ROI time series} \label{sec:roi-extraction}
+
+In the current study, we considered the commonly used approach of applying an inverse method followed by aggregation of the reconstructed time courses of activity for vertices within the ROI. For both steps, we selected representative methods based on the aforementioned literature review (Supp. Mat. \ref{supp-sec:review}). Theoretical calculations were performed only for data-independent pipelines, while all pipelines were applied to the simulated data.
+
+\paragraph{Inverse modeling}
+
+We applied eLORETA \citep{eLORETA_PascualMarqui2007} with regularization parameter ($\alpha$ in the notation of the original paper) set to \tocheck{\invReg} and an identity noise covariance matrix. In addition, we used the LCMV beamformer with unit-noise-gain normalization \citep{LCMV_VanVeen1997, SekiharaNagarajan2008} and the same values of regularization parameter and noise covariance matrix. The data covariance matrix for LCMV was calculated using 4-second windows with 50\% overlap.
+
+\paragraph{ROI aggregation}
+
+We considered several commonly used options for aggregation weights: averaging (mean), averaging after applying the sign flip to reduce the potential amount of activity cancellation (mean-flip), taking the time course of the vertex that is the closest to the center of gravity of the ROI (centroid), and taking the first component of the singular value decomposition (SVD).
+
+\subsection{Estimation of functional connectivity}
+
+We used coherency as a measure of connectivity between pairs of extracted ROI time series or, for the RIFT dataset, between the ROI time series and the external stimulus. We applied Welch's method \citep{Welch1967} with a Hann window (50\% overlap) and a frequency resolution of 1 Hz to obtain the cross-spectrum of both time series, and then normalized it by their autospectra to obtain coherency. Depending on the context (see Sections \ref{sec:sc-methods} and \ref{sec:rift-methods}), we used either coherence (the absolute part of coherency) or the absolute value of the imaginary part of coherency (ImCoh), and averaged both measures over the frequency range of interest. Note that ImCoh is sensitive only to interactions with a non-zero phase delay \citep{Nolte2004}, which cannot be caused by RFS. In contrast, coherence is likely to detect spurious interactions driven purely by RFS.
+
+\subsection{Simulations}
+
+We simulated distributed ground-truth source activity (similar to a typical resting-state recording) and focused on the oscillatory activity and connectivity in the alpha (\tocheck{\fminAlphaHz--\fmaxAlphaHz} Hz) range. The simulation workflow follows existing literature \citep{Idaji2020, Pellegrini2023} and is schematically presented in Fig. \ref{fig:simulation-workflow}\tocheck{A}. This subsection is focused on the default simulation settings. Detailed information about the performed experiments is presented in the following subsection. The mathematical formulation of the simulation algorithm is provided in the Supp. Mat. \ref{supp-sec:simulation-algorithm}, while the implementation of all building blocks is available as a Python package MEEGsim (v\tocheck{\versionMEEGsim}; \cite{MEEGsim2025}).
+
+\paragraph{Sources and activity waveforms}
+
+In most simulations, we placed one source of alpha (\tocheck{\fminAlphaHz--\fmaxAlphaHz}~Hz) activity at a randomly selected location in each ROI of the DK parcellation. By default, we used point-like sources. To make the simulations more realistic, we also considered patch-like sources, setting identical activity waveforms for all vertices within one patch-like source. Then we added \tocheck{\simNumNoiseSources}~point-like sources of background (1/f noise with an exponent of 1) activity at random locations across the cortex. By default, the standard deviation of activity was the same for all sources and equal to 1 nAm, but in some experiments it was adjusted to introduce unequal source variance.
+
+\paragraph{Ground-truth connectivity}
+
+To simulate waveforms with ground-truth source connectivity, we applied the Hilbert transform to the original waveform and shifted its phase by a constant value, which defined the mean phase lag. We then mixed the waveform with white noise in different proportions to control the coherence between the original and coupled waveforms. The pairs of connected sources and the mean phase lag were selected randomly, while the number and strength of connections were varied systematically.
+
+\paragraph{Signal-to-noise ratio (SNR)}
+
+Sensor-space variance of all alpha sources was adjusted relative to all 1/f sources to obtain a specific level of global SNR in \tocheck{\fminAlphaHz--\fmaxAlphaHz}~Hz \citep{HaufeEwald2019}. Then, alpha and 1/f activity were projected to the sensor space and combined with a specified level of sensor noise (modeled as multivariate white noise).
+
+\paragraph{Evaluation of the extraction quality}
+
+Using simulated data, we extracted the time series of activity for each ROI and evaluated the Pearson correlation between the extracted signal and the ground-truth activity of the alpha source within the ROI. Extracted and ground-truth time series were filtered in \tocheck{\fminAlphaHz--\fmaxAlphaHz}~Hz using an 8th order Butterworth filter before estimating the correlation.
+
+\subsection{Experiments} \label{subsec:experiments}
+
+We performed a series of experiments (Experiments 1-4b) to test the relevance of CTF under violations of the default assumption of an identity source covariance matrix (e.g., when source activity at different spatial locations is correlated). To disentangle possible factors, we manipulated the structure of the covariance matrix in steps, as shown in Fig. \ref{fig:simulation-workflow}\tocheck{B}. In addition, we performed two simulations to illustrate the effect of RFS on the extraction of activity (Experiment A) and estimation of connectivity (Experiment B). An overview of simulation parameters for all experiments is presented in Table \ref{tab:simulation_parameters}.
+
+\paragraph{Experiments 1-4b}
+
+In Experiment 1, we used point-like sources and investigated the effect of the spatial distribution of source activity, starting from equal source variance (the default assumption) and progressing toward more realistic distributions with dominant sources in the parieto-occipital areas. The source distributions were derived from the resting-state recordings of the LEMON dataset in the eyes-open (EO) and the eyes-closed (EC) conditions (Supp. Mat. \ref{supp-sec:inferred_params}).
+
+In Experiment 2, we used an EO-like distribution of source variance and varied the spatial extent of the sources. In addition to point-like sources (the default assumption), we simulated cortical patches with areas of 2, 4, and 8 cm$^2$, similar to previous studies (e.g., \cite{Hincapie2017}). Patches were grown from a random location within the corresponding ROI and constrained to remain within the ROI.
+
+In Experiment 3, we added ground-truth connectivity between sources (\tocheck{\simPatchSizeDefault} cm$^2$ patches) belonging to different ROIs. We considered two levels, referred to as weak and strong, and compared them with the case of no ground-truth connectivity (default assumption).
+Coherence values were drawn from a Gaussian distribution. Weak ground-truth connectivity corresponded to \tocheck{\simConnWeakNumEdges}~randomly selected edges with mean coherence of \tocheck{\simConnWeakCohMean}~and a standard deviation (SD) of \tocheck{\simConnWeakCohSD}. Strong connectivity was simulated by adding \tocheck{\simConnStrongNumEdges}~edges with a mean coherence of \tocheck{\simConnStrongCohMean}~and an SD of \tocheck{\simConnStrongCohSD}. The phase delays were randomly selected from a uniform distribution over [0, 2$\pi$].
+
+Finally, we investigated the influence of background brain activity (global SNR; Experiment 4a) and sensor noise (Experiment 4b). Both parameters were manipulated based on the values derived from the LEMON dataset (Supp. Mat. \ref{supp-sec:inferred_params}). For the global SNR (as defined in Eq. \ref{supp-eq:sim-global-snr}), we considered levels of -4.8, 0, and 4.8 dB (the latter was used in all other experiments). The amount of sensor noise (see Eq. \ref{supp-eq:sim-sensor-noise}) was equal to 1\% (default), 10\%, or 25\% of the total power.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \resizebox{\linewidth}{!}{%
+    \begin{tabular}{|p{3 cm}|p{1.6 cm}|p{1.6 cm}|p{1.3 cm}|p{1 cm}|p{1 cm}|p{1.5 cm}|p{2.2 cm}|}
+        \hline
+        \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{7}{|c|}{\textbf{Experiment}} \\
+        \cline{2-8}
+         & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4a} & \textbf{4b} & \textbf{A} & \textbf{B} \\
+        \hline
+        Sampling frequency (Hz) & \multicolumn{7}{|c|}{\simSfreq} \\
+        \hline
+        Data length (s) & \multicolumn{7}{|c|}{\simDuration} \\
+        \hline
+        Number of 1/f sources & \multicolumn{7}{|c|}{\simNumNoiseSources} \\
+        \hline
+        Alpha frequency range (Hz) & \multicolumn{7}{|c|}{\fminAlphaHz--\fmaxAlphaHz} \\
+        \hline
+        Number of simulations & \multicolumn{5}{|c|}{\simNumSimulations} & \multicolumn{2}{|c|}{1} \\
+        \hline
+        Location of target sources & \multicolumn{5}{|c|}{Random within the ROI} & Custom$^*$ & Center of the ROI \\
+        \hline
+        Source variance & Equal, EO-like$^*$, EC-like$^*$ & \multicolumn{4}{|c|}{EO-like} & Equal, unequal$^*$ & Equal \\
+        \hline
+        Spatial extent of sources & \multicolumn{1}{|c|}{Point} & Point, patch (2, 4, 8 cm$^2$) & \multicolumn{3}{|c|}{Patch (\simPatchSizeDefault cm$^2$)} & Point & Patch (\simPatchSizeDefault cm$^2$) \\
+        \hline
+        Ground-truth connectivity & \multicolumn{2}{|c|}{None} & None, weak$^*$, strong$^*$ & \multicolumn{2}{|c|}{Weak$^*$} & None & None, target$^*$, interference$^*$, both$^*$\\
+        \hline
+        Global SNR (dB) & \multicolumn{3}{|c|}{\simGlobalSNRdB} & -4.8, 0, 4.8 & \multicolumn{1}{|c|}{\simGlobalSNRdB} & \multicolumn{2}{|c|}{\simGlobalSNRdB} \\
+        \hline
+        Level of sensor noise (\%) & \multicolumn{4}{|c|}{\simSensorNoiseDefault} & 1, 10, 25 & \multicolumn{2}{|c|}{\simSensorNoiseDefault} \\
+        \hline
+    \end{tabular}}
+    \caption{Overview of simulation parameters in performed experiments. Values with asterisks are explained in more detail in the Methods section. Abbreviations: EO --- eyes-open condition, EC --- eyes-closed condition, SNR --- signal-to-noise ratio, ROI --- region of interest.}
+    \label{tab:simulation_parameters}
+\end{table}
+
+\paragraph{Experiment A (activity extraction)}
+
+We placed three point-like sources near the postcentral gyrus of the left hemisphere. The source locations were selected manually to highlight the differences between the considered approaches for ROI aggregation (mean, mean-flip, centroid). To show that CTF doesn't account for source variance by default, we simulated two cases (equal and unequal source variance) with the same source locations. In the second case, the amplitude of one source (shown in \tocheck{green} in Fig. \ref{fig:minimal-example}\tocheck{B}) was increased \tocheck{\simExpAUnequalStd}-fold.
+
+\paragraph{Experiment B (connectivity estimation)}
+
+We picked two target ROIs with low CTF ratio (caudal anterior division of left cingulate cortex, isthmus division of right cingulate cortex) and two interfering ROIs (left superior frontal gyrus, right inferior parietal cortex) based on the CTF of target ROIs for eLORETA and the mean-flip aggregation approach. All ROIs were defined according to the DK parcellation. We placed a \tocheck{\connExamplePatchSize}~cm$^2$ patch-like source in the center of each ROI and varied the presence of ground-truth connections between target and interfering sources. In total, there were four possible cases: no ground-truth connections, either the target or the interfering one, or both. If a connection was present, we simulated ground-truth coherence of \tocheck{\connExampleGTCoh}~and a phase lag of \tocheck{$\connExampleGTPhaseLag$}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig2_simulation_workflow.png}
+    \caption{Simulations were performed to validate the CTF-based evaluation under deviation from assumptions. (A) The common workflow for the simulations. Sources of 1/f noise (dark gray) and ground-truth alpha activity (green) were simulated, and their activity was projected to the sensor space with a specified alpha-to-1/f ratio and sensor noise. The extraction quality for all pipelines was evaluated via correlation between the extracted ROI time series and the ground-truth activity waveform of the alpha source within the ROI. Both time series were filtered in \fminAlphaHz--\fmaxAlphaHz~Hz before calculating the correlation. (B) We performed five experiments to test the effect of various violations of default assumptions about source activity. Specifically, we varied the spatial distribution of source variance, the spatial extent of the simulated sources, the presence and strength of ground-truth connectivity, and the level of 1/f and sensor noise. Details about the simulation parameters are presented in section \ref{subsec:experiments}. Darker shades of red denote higher variance, coherence, and noise level in Experiments 1, 3, and 4, respectively.}
+    \label{fig:simulation-workflow}
+\end{figure}
+
+\subsection{CTF ratio as a metric of extraction quality}
+
+As shown in Supp. Mat. \ref{supp-sec:extraction-quality}, the square root of the CTF ratio is proportional to the extraction quality (correlation between ROI time series and the ground-truth activity) for a source that is placed at a random location within the ROI. Using simulated data from Experiments 1-4b, we evaluated the relationship between the CTF ratio and extraction quality using Pearson correlation and investigated the effect of deviations from the default assumptions behind CTF.
+
+\subsection{Spurious coherence} \label{sec:sc-methods}
+
+To estimate the amount of spurious coherence (SC) present in real resting-state EEG data, we destroyed all genuine interactions in the data with permutations \citep{Shahbazi2010}. First, the time courses of ICA components (available in the preprocessed LEMON dataset) were cropped into \tocheck{\scPermSegLen}-second segments. Then, the segments were shuffled independently for each ICA component to destroy all genuine interactions present in the data. For shuffling, we used the implementation of permutations from \cite{Idaji2022}. Then, the shuffled ICA time courses were projected back into the sensor space to obtain surrogate recordings. In total, we generated \tocheck{\scNumPermutations}~surrogate recordings for each participant. Since all coherence that remains in the data after permutations is expected to be spurious, we estimated SC as the average coherence in the alpha (\tocheck{\fminAlphaHz--\fmaxAlphaHz}~Hz) band. The values of SC were averaged across participants and surrogate recordings for the EO and EC conditions.
+
+Since SC is directly caused by RFS, the expected amount of spurious coherence can be derived from CTFs of ROI- and pipeline-specific spatial filters (Eq. \ref{eq:spurious-coherence}). We performed these calculations only for data-independent pipelines using the grand-average source variance for the respective condition (obtained with eLORETA, see Supp. Mat. \ref{supp-sec:inferred_params}). For comparison, we included another model based only on the distance between the centers of gravity of the interacting ROIs. Intuitively, the amount of SC should decrease as ROIs become farther apart. However, as the precise dependency function isn't known, we fitted a power-law model with distance between ROIs $d$ as a predictor and values of SC observed in the surrogate data as the target:
+
+\begin{equation}
+    \text{SC} \sim d^\gamma
+\end{equation}
+
+\noindent This way, we allowed the slope $\gamma$ to be arbitrary and selected the value that yielded the best model fit.
+
+Both models were evaluated using the Pearson correlation between their predictions and surrogate data estimates of SC. We performed two types of comparisons for each pipeline: one using raw estimates of SC (referred to as raw) and another using the difference between the pipeline-specific estimate of SC and the average estimate of SC across all pipelines (referred to as delta). The second approach assesses whether the model can explain differences in SC across extraction pipelines. For evaluation, only the upper triangular part of the SC matrices (\tocheck{\scNumDKConnections}~ connectivity edges) was considered.
+
+\subsection{Analysis of RIFT data} \label{sec:rift-methods}
+
+We used the MEG data from the single-stimulus condition to estimate coherence between the time courses of activity extracted from all ROIs of the DK parcellation and the stimulus's luminance (later referred to as brain-stimulus coherence). In the two-stimuli condition, we evaluated the absolute value of ImCoh between all pairs of ROIs (referred to as brain-brain ImCoh). In both cases, we extracted ROI time series using all data-independent pipelines as mentioned previously (Section \ref{sec:roi-extraction}). Connectivity values at the stimulation frequency (\tocheck{\riftStimFreq}~Hz) were averaged across all participants.
+
+To illustrate the presence of brain-stimulus coherence in the data, we also estimated it in sensor space. In addition, we extracted the grand-average steady-state visual evoked response (SSVER) from the left pericalcarine cortex (DK parcellation) using eLORETA and mean-flip ROI aggregation weights.
+
+In the main analysis, we tested whether the results of the ROI-based analyses could be explained by ghost interactions, assuming two point-like SSVER generators located in the calcarine sulci of both hemispheres. In the single-stimulus condition, we assumed that activity is identical in both hemispheres and synchronized with the external stimulus, with arbitrary coherence and phase lag. In the two-stimuli condition, we assumed a $\pi/2$ delay between hemispheres, since this delay was applied to the presented stimuli.
+
+We considered three models for predicting the expected amount of brain-stimulus coherence and brain-brain ImCoh (see Supp. Mat. \ref{supp-sec:rfs-models} for details). The first model was based on the CTF of the spatial filters that correspond to each ROI and the extraction pipeline. For comparison, we also included one model that assumed no RFS and another that assumed the RFS to depend only on the distance between the ROIs' centroids and the assumed generators of SSVER. Since the ground-truth locations of SSVER generators were unknown, we treated them as hyperparameters for each model and performed a grid search over all locations in the pericalcarine cortex of the DK parcellation. Pearson correlation between the model predictions and estimates from real data was used as the evaluation metric. When evaluating the models, we only focused on significant connections, where the observed connectivity values exceeded the noise floor of brain-stimulus coherence or brain-brain ImCoh. The noise floor for both measures was estimated as the \tocheck{\riftNoiseFloorPercentile}th percentile of the null distribution based on \tocheck{\riftNoiseFloorNumSimulations}~simulations with random noise of the same length as real data (see Fig. \ref{supp-fig:noise-floor-onestim} and \ref{supp-fig:noise-floor-twostim} for brain-stimulus coherence and brain-brain ImCoh, respectively). The final comparison between models was performed using the locations of the SSVER generators, which yielded the best fit for each model.

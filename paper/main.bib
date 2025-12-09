@@ -1,0 +1,822 @@
+Forward and inverse modeling
+
+@article{Sarvas1987,
+    title = {{B}asic mathematical and electromagnetic concepts of the biomagnetic inverse problem},
+    author = {Sarvas, J},
+    journal-long = {Physics in medicine and biology},
+    journal = {Phys Med Biol},
+    volume = {32},
+    pages = {11-22},
+    year = {1987},
+    doi = {10.1088/0031-9155/32/1/004}
+}
+
+@book{KnoescheHaueisen2022,
+    title = {{EEG}/{MEG} {S}ource {R}econstruction},
+    author = {Knösche, Thomas R. and Haueisen, Jens},
+    year = {2022},
+    publisher = {Springer Cham},
+    doi = {10.1007/978-3-030-74918-7}
+}
+
+Toolboxes and other dependencies
+
+@article{Oostenveld2011,
+    title = {{F}ield{T}rip: {O}pen source software for advanced analysis of {MEG}, {EEG}, and invasive electrophysiological data},
+    author = {Oostenveld, Robert and Fries, Pascal and Maris, Eric and Schoffelen, Jan-Mathijs},
+    journal-long = {Computational intelligence and neuroscience},
+    journal = {Comput Intell Neurosci},
+    volume = {2011},
+    pages = {156869},
+    year = {2011},
+    doi = {10.1155/2011/156869}
+}
+
+@article{Gramfort2013,
+    title = {{MEG} and {EEG} data analysis with {MNE}-{P}ython},
+    author = {Gramfort, Alexandre and Luessi, Martin and Larson, Eric and Engemann, Denis A and Strohmeier, Daniel and Brodbeck, Christian and Goj, Roman and Jas, Mainak and Brooks, Teon and Parkkonen, Lauri and Hämäläinen, Matti},
+    journal-long = {Frontiers in neuroscience},
+    journal = {Front Neurosci},
+    volume = {7},
+    pages = {267},
+    year = {2013},
+    doi = {10.3389/fnins.2013.00267}
+}
+
+@software{MNE_Larson2024,
+  author       = {Larson, Eric and
+                  Gramfort, Alexandre and
+                  Engemann, Denis A and
+                  \textit{et al.}},
+  title        = {{MNE}-{P}ython},
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v1.9.0},
+  doi          = {10.5281/zenodo.14519545}
+}
+
+@article{Gramfort2014,
+    title = {{MNE} software for processing {MEG} and {EEG} data},
+    author = {Gramfort, Alexandre and Luessi, Martin and Larson, Eric and Engemann, Denis A and Strohmeier, Daniel and Brodbeck, Christian and Parkkonen, Lauri and Hämäläinen, Matti S},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {86},
+    pages = {446-60},
+    year = {2014},
+    doi = {10.1016/j.neuroimage.2013.10.027}
+}
+
+@article{Fischl1999,
+    title = {{H}igh-resolution intersubject averaging and a coordinate system for the cortical surface},
+    author = {Fischl, B and Sereno, M I and Tootell, R B and Dale, A M},
+    journal-long = {Human brain mapping},
+    journal = {Hum Brain Mapp},
+    volume = {8},
+    pages = {272-84},
+    year = {1999},
+    doi = {10.1002/(sici)1097-0193(1999)8:4<272::aid-hbm10>3.0.co;2-4}
+}
+
+@software{MEEGsim2025,
+    author = {Kapralov, Nikolai and Studenova, Alina and Jamshidi Idaji, Mina},
+    license = {BSD-3-Clause},
+    month = aug,
+    title = {{MEEGsim}},
+    url = {https://github.com/ctrltz/meegsim},
+    version = {0.0.2},
+    year = {2025}
+}
+
+@article{Snakemake_Moelder,
+    author = { Mölder, F and Jablonski, KP and Letcher, B and Hall, MB and van Dyken, PC and Tomkins-Tinch, CH and Sochat, V and Forster, J and Vieira, FG and Meesters, C and Lee, S and Twardziok, SO and Kanitz, A and VanCampen, J and Malladi, V and Wilm, A and Holtgrewe, M and Rahmann, S and Nahnsen, S and Köster, J},
+    title = {{S}ustainable data analysis with {S}nakemake},
+    journal = {F1000Research},
+    volume = {10},
+    year = {2025},
+    number = {33},
+    doi = {10.12688/f1000research.29032.3}
+}
+
+Datasets
+
+@article{Babayan2019,
+    title={A mind-brain-body dataset of {MRI}, {EEG}, cognition, emotion, and peripheral physiology in young and old adults},
+    author={Babayan, Anahit and Erbey, Miray and Kumral, Deniz and Reinelt, Janis D and Reiter, Andrea M F and Röbbig, Josefin and Schaare, H Lina and Uhlig, Marie and Anwander, Alfred and Bazin, Pierre-Louis and Horstmann, Annette and Lampe, Leonie and Nikulin, Vadim V and Okon-Singer, Hadas and Preusser, Sven and Pampel, André and Rohr, Christiane S and Sacher, Julia and Thöne-Otto, Angelika and Trapp, Sabrina and Nierhaus, Till and Altmann, Denise and Arelin, Katrin and Blöchl, Maria and Bongartz, Edith and Breig, Patric and Cesnaite, Elena and Chen, Sufang and Cozatl, Roberto and Czerwonatis, Saskia and Dambrauskaite, Gabriele and Dreyer, Maria and Enders, Jessica and Engelhardt, Melina and Fischer, Marie Michele and Forschack, Norman and Golchert, Johannes and Golz, Laura and Guran, C Alexandrina and Hedrich, Susanna and Hentschel, Nicole and Hoffmann, Daria I and Huntenburg, Julia M and Jost, Rebecca and Kosatschek, Anna and Kunzendorf, Stella and Lammers, Hannah and Lauckner, Mark E and Mahjoory, Keyvan and Kanaan, Ahmad S and Mendes, Natacha and Menger, Ramona and Morino, Enzo and Näthe, Karina and Neubauer, Jennifer and Noyan, Handan and Oligschläger, Sabine and Panczyszyn-Trzewik, Patricia and Poehlchen, Dorothee and Putzke, Nadine and Roski, Sabrina and Schaller, Marie-Catherine and Schieferbein, Anja and Schlaak, Benito and Schmidt, Robert and Gorgolewski, Krzysztof J and Schmidt, Hanna Maria and Schrimpf, Anne and Stasch, Sylvia and Voss, Maria and Wiedemann, Annett and Margulies, Daniel S and Gaebler, Michael and Villringer, Arno},
+    journal={Scientific data},
+    journal-short={Sci Data},
+    volume={6},
+    pages={180308},
+    year={2019},
+    doi={10.1038/sdata.2018.308}
+}
+
+@dataset{Spaak2024_dataset,
+  author = {Spaak, E. and Bouwkamp, F.G. and de Lange, F.P.},
+  title = {{Establishing a solid basis for Rapid Invisible Frequency Tagging (RIFT)}},
+  year = 2024,
+  publisher = {Radboud University},
+  version = 1,
+  doi = {10.34973/8dx5-7e51}
+}
+
+@Article{Spaak2024_paper,
+    author = {Spaak, Eelke and Bouwkamp, Floortje G. and de Lange, Floris P.},
+    title = {{P}erceptual foundation and extension to phase tagging for rapid invisible frequency tagging ({RIFT})},
+    journal = {Imaging Neuroscience},
+    volume = {2},
+    pages = {1-14},
+    year = {2024},
+    month = {07},
+    issn = {2837-6056},
+    doi = {10.1162/imag_a_00242}
+}
+
+Resolution matrix and CTF
+
+@article{BackusGilbert1968,
+    author = {Backus, George and Gilbert, Freeman},
+    title = {The Resolving Power of Gross Earth Data},
+    journal = {Geophysical Journal International},
+    volume = {16},
+    number = {2},
+    pages = {169-205},
+    year = {1968},
+    month = {10},
+    doi = {10.1111/j.1365-246X.1968.tb00216.x}
+}
+
+﻿@Article{dePeraltaMenendez1996,
+    author={de Peralta Menendez, Rolando Grave
+    and Gonzalez Andino, Sara L.
+    and Lütkenhöner, Bernd},
+    title={{F}igures of merit to compare distributed linear inverse solutions},
+    journal={Brain Topography},
+    year={1996},
+    month={Dec},
+    day={01},
+    volume={9},
+    number={2},
+    pages={117-124},
+    doi={10.1007/BF01200711},
+}
+
+@article{Lütkenhöner1997,
+    title = {{T}he resolution-field concept},
+    author = {Lütkenhöner, B and Grade de Peralta Menendez, R},
+    journal-long = {Electroencephalography and clinical neurophysiology},
+    journal = {Electroencephalogr Clin Neurophysiol},
+    volume = {102},
+    pages = {326-34},
+    year = {1997},
+    doi = {10.1016/s0013-4694(96)96590-6}
+}
+
+@article{Hauk2011,
+    title = {{C}omparison of noise-normalized minimum norm estimates for {MEG} analysis using multiple resolution metrics},
+    author = {Hauk, Olaf and Wakeman, Daniel G and Henson, Richard},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {54},
+    pages = {1966-74},
+    year = {2011},
+    doi = {10.1016/j.neuroimage.2010.09.053}
+}
+
+@article{Molins2008,
+    title = {{Q}uantification of the benefit from integrating {MEG} and {EEG} data in minimum l2-norm estimation},
+    author = {Molins, A and Stufflebeam, S M and Brown, E N and Hämäläinen, M S},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {42},
+    pages = {1069-77},
+    year = {2008},
+    doi = {10.1016/j.neuroimage.2008.05.064}
+}
+
+Previous studies using CTF ratio
+
+@article{Bolton1999,
+    title = {{SOFIA}: spatially optimal fast initial analysis of biomagnetic signals},
+    author = {Bolton, J P and Gross, J and Liu, L C and Ioannides, A A},
+    journal-long = {Physics in medicine and biology},
+    journal = {Phys Med Biol},
+    volume = {44},
+    pages = {87-103},
+    year = {1999},
+    doi = {10.1088/0031-9155/44/1/008}
+}
+
+@article{Gross1999,
+    title = {{L}inear transformations of data space in {MEG}},
+    author = {Gross, J and Ioannides, A A},
+    journal-long = {Physics in medicine and biology},
+    journal = {Phys Med Biol},
+    volume = {44},
+    pages = {2081-97},
+    year = {1999},
+    doi = {10.1088/0031-9155/44/8/317}
+}
+
+@article{GrosseWentrup2009,
+    title = {{B}eamforming in noninvasive brain-computer interfaces},
+    author = {Grosse-Wentrup, Moritz and Liefhold, Christian and Gramann, Klaus and Buss, Martin},
+    journal-long = {IEEE transactions on bio-medical engineering},
+    journal = {IEEE Trans Biomed Eng},
+    volume = {56},
+    pages = {1209-19},
+    year = {2009},
+    doi = {10.1109/TBME.2008.2009768}
+}
+
+Inverse methods
+
+@article{Grech2008,
+    title = {{R}eview on solving the inverse problem in {EEG} source analysis},
+    author = {Grech, Roberta and Cassar, Tracey and Muscat, Joseph and Camilleri, Kenneth P and Fabri, Simon G and Zervakis, Michalis and Xanthopoulos, Petros and Sakkalis, Vangelis and Vanrumste, Bart},
+    journal-long = {Journal of neuroengineering and rehabilitation},
+    journal = {J Neuroeng Rehabil},
+    volume = {5},
+    pages = {25},
+    year = {2008},
+    doi = {10.1186/1743-0003-5-25}
+}
+
+@article{eLORETA_PascualMarqui2007,
+  title     = {Discrete, 3{D} distributed, linear imaging methods of electric neuronal activity. {P}art 1: exact, zero error localization.},
+  author    = {Pascual-Marqui, Roberto D.},
+  year      = 2007,
+  publisher = {arXiv},
+  doi       = {10.48550/ARXIV.0710.3341}
+}
+
+@article{LCMV_VanVeen1997,
+  title     = {Localization of brain electrical activity via linearly constrained minimum variance spatial filtering},
+  author    = {Van Veen, B.D. and Van Drongelen, W. and Yuchtman, M. and Suzuki, A.},
+  year      = 1997,
+  journal   = {IEEE Transactions on Biomedical Engineering},
+  volume    = 44,
+  number    = 9,
+  pages     = {867--880},
+  doi       = {10.1109/10.623056}
+}
+
+@article{sLORETA_PascualMarqui2002,
+    title = {{S}tandardized low-resolution brain electromagnetic tomography (s{LORETA}): technical details},
+    author = {Pascual-Marqui, R D},
+    journal-long = {Methods and findings in experimental and clinical pharmacology},
+    journal = {Methods Find Exp Clin Pharmacol},
+    volume = {24 Suppl D},
+    pages = {5-12},
+    year = {2002},
+    doi = {}
+}
+
+@book{SekiharaNagarajan2008,
+  address = {{Berlin; Heidelberg}},
+  author = {Sekihara, Kensuke and Nagarajan, Srikantan S.},
+  doi = {10.1007/978-3-540-79370-0},
+  editor = {Nagel, Joachim H.},
+  isbn = {978-3-540-79369-4 978-3-540-79370-0},
+  publisher = {Springer},
+  series = {Series in {{Biomedical Engineering}}},
+  title = {Adaptive Spatial Filters for Electromagnetic Brain Imaging},
+  year = {2008}
+}
+
+Extraction of ROI time series
+
+@article{Korhonen2014,
+    title = {{S}parse weightings for collapsing inverse solutions to cortical parcellations optimize {M}/{EEG} source reconstruction accuracy},
+    author = {Korhonen, Onerva and Palva, Satu and Palva, J Matias},
+    journal-long = {Journal of neuroscience methods},
+    journal = {J Neurosci Methods},
+    volume = {226},
+    pages = {147-160},
+    year = {2014},
+    doi = {10.1016/j.jneumeth.2014.01.031}
+}
+
+Parcellations
+
+@book{Brodmann1909,
+  title={Vergleichende Lokalisationslehre der Grosshirnrinde in ihren Prinzipien dargestellt auf Grund des Zellenbaues},
+  author={Brodmann, Korbinian},
+  year={1909},
+  publisher={Barth}
+}
+
+@article{DesikanKilliany2006,
+    title = {{A}n automated labeling system for subdividing the human cerebral cortex on {MRI} scans into gyral based regions of interest},
+    author = {Desikan, Rahul S and Ségonne, Florent and Fischl, Bruce and Quinn, Brian T and Dickerson, Bradford C and Blacker, Deborah and Buckner, Randy L and Dale, Anders M and Maguire, R Paul and Hyman, Bradley T and Albert, Marilyn S and Killiany, Ronald J},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {31},
+    pages = {968-80},
+    year = {2006},
+    doi = {10.1016/j.neuroimage.2006.01.021}
+}
+
+@article{Destrieux2010,
+    title = {{A}utomatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature},
+    author = {Destrieux, Christophe and Fischl, Bruce and Dale, Anders and Halgren, Eric},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {53},
+    pages = {1-15},
+    year = {2010},
+    doi = {10.1016/j.neuroimage.2010.06.010}
+}
+
+@article{AAL_TzourioMazoyer2002,
+    title = {{A}utomated anatomical labeling of activations in {SPM} using a macroscopic anatomical parcellation of the {MNI} {MRI} single-subject brain},
+    author = {Tzourio-Mazoyer, N and Landeau, B and Papathanassiou, D and Crivello, F and Etard, O and Delcroix, N and Mazoyer, B and Joliot, M},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {15},
+    pages = {273-89},
+    year = {2002},
+    doi = {10.1006/nimg.2001.0978}
+}
+
+@article{DKT_Klein2012,
+    title = {101 labeled brain images and a consistent human cortical labeling protocol},
+    author = {Klein, Arno and Tourville, Jason},
+    journal-long = {Frontiers in neuroscience},
+    journal = {Front Neurosci},
+    volume = {6},
+    pages = {171},
+    year = {2012},
+    doi = {10.3389/fnins.2012.00171}
+}
+
+@article{Glasser2016,
+    title = {{A} multi-modal parcellation of human cerebral cortex},
+    author = {Glasser, Matthew F and Coalson, Timothy S and Robinson, Emma C and Hacker, Carl D and Harwell, John and Yacoub, Essa and Ugurbil, Kamil and Andersson, Jesper and Beckmann, Christian F and Jenkinson, Mark and Smith, Stephen M and Van Essen, David C},
+    journal-long = {Nature},
+    journal = {Nature},
+    volume = {536},
+    pages = {171-178},
+    year = {2016},
+    doi = {10.1038/nature18933}
+}
+
+@article{Schaefer2018,
+    title = {{L}ocal-{G}lobal {P}arcellation of the {H}uman {C}erebral {C}ortex from {I}ntrinsic {F}unctional {C}onnectivity {MRI}},
+    author = {Schaefer, Alexander and Kong, Ru and Gordon, Evan M and Laumann, Timothy O and Zuo, Xi-Nian and Holmes, Avram J and Eickhoff, Simon B and Yeo, B T Thomas},
+    journal-long = {Cerebral cortex (New York, N.Y. : 1991)},
+    journal = {Cereb Cortex},
+    volume = {28},
+    pages = {3095-3114},
+    year = {2018},
+    doi = {10.1093/cercor/bhx179}
+}
+
+Parcellations optimized for M/EEG
+
+@article{Farahibozorg2018,
+    title = {{A}daptive cortical parcellations for source reconstructed {EEG}/{MEG} connectomes},
+    author = {Farahibozorg, Seyedeh-Rezvan and Henson, Richard N and Hauk, Olaf},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {169},
+    pages = {23-45},
+    year = {2018},
+    doi = {10.1016/j.neuroimage.2017.09.009}
+}
+
+@article{Tait2021,
+    title = {{A} systematic evaluation of source reconstruction of resting {MEG} of the human brain with a new high-resolution atlas: {P}erformance, precision, and parcellation},
+    author = {Tait, Luke and Özkan, Ayşegül and Szul, Maciej J and Zhang, Jiaxiang},
+    journal-long = {Human brain mapping},
+    journal = {Hum Brain Mapp},
+    volume = {42},
+    pages = {4685-4707},
+    year = {2021},
+    doi = {10.1002/hbm.25578}
+}
+
+@article{Sommariva2025,
+    title = {{C}ortical parcellation optimized for magnetoencephalography with a clustering technique},
+    author = {Sommariva, Sara and Subramaniyam, Narayan Puthanmadam and Parkkonen, Lauri},
+    journal-long = {Scientific reports},
+    journal = {Sci Rep},
+    volume = {15},
+    pages = {6404},
+    year = {2025},
+    doi = {10.1038/s41598-025-90166-1}
+}
+
+Applications of ROI-based analysis
+
+@article{Zrenner2018,
+    title = {{R}eal-time {EEG}-defined excitability states determine efficacy of {TMS}-induced plasticity in human motor cortex},
+    author = {Zrenner, Christoph and Desideri, Debora and Belardinelli, Paolo and Ziemann, Ulf},
+    journal-long = {Brain stimulation},
+    journal = {Brain Stimul},
+    volume = {11},
+    pages = {374-389},
+    year = {2018},
+    doi = {10.1016/j.brs.2017.11.016}
+}
+
+@article{Neymotin2020,
+    title = {{H}uman {N}eocortical {N}eurosolver ({HNN}), a new software tool for interpreting the cellular and network origin of human {MEG}/{EEG} data},
+    author = {Neymotin, Samuel A and Daniels, Dylan S and Caldwell, Blake and McDougal, Robert A and Carnevale, Nicholas T and Jas, Mainak and Moore, Christopher I and Hines, Michael L and Hämäläinen, Matti and Jones, Stephanie R},
+    journal-long = {eLife},
+    journal = {Elife},
+    volume = {9},
+    pages = {e51214},
+    year = {2020},
+    doi = {10.7554/eLife.51214}
+}
+
+@article{DaSilvaCastanheira2021,
+    title = {{B}rief segments of neurophysiological activity enable individual differentiation},
+    author = {da Silva Castanheira, Jason and Orozco Perez, Hector Domingo and Misic, Bratislav and Baillet, Sylvain},
+    journal-long = {Nature communications},
+    journal = {Nat Commun},
+    volume = {12},
+    pages = {5713},
+    year = {2021},
+    doi = {10.1038/s41467-021-25895-8}
+}
+
+@article{Kumral2022,
+    title = {{A}ttenuation of the {H}eartbeat-{E}voked {P}otential in {P}atients {W}ith {A}trial {F}ibrillation},
+    author = {Kumral, Deniz and Al, Esra and Cesnaite, Elena and Kornej, Jelena and Sander, Christian and Hensch, Tilman and Zeynalova, Samira and Tautenhahn, Sandra and Hagendorf, Andreas and Laufs, Ulrich and Wachter, Rolf and Nikulin, Vadim and Villringer, Arno},
+    journal-long = {JACC. Clinical electrophysiology},
+    journal = {JACC Clin Electrophysiol},
+    volume = {8},
+    pages = {1219-1230},
+    year = {2022},
+    doi = {10.1016/j.jacep.2022.06.019}
+}
+
+Comparing extraction methods in real data and simulations
+
+@article{Mahjoory2017,
+    title = {{C}onsistency of {EEG} source localization and connectivity estimates},
+    author = {Mahjoory, Keyvan and Nikulin, Vadim V and Botrel, Loïc and Linkenkaer-Hansen, Klaus and Fato, Marco M and Haufe, Stefan},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {152},
+    pages = {590-601},
+    year = {2017},
+    doi = {10.1016/j.neuroimage.2017.02.076}
+}
+
+@article{Pellegrini2023,
+    title = {{I}dentifying good practices for detecting inter-regional linear functional connectivity from {EEG}},
+    author = {Pellegrini, Franziska and Delorme, Arnaud and Nikulin, Vadim and Haufe, Stefan},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {277},
+    pages = {120218},
+    year = {2023},
+    doi = {10.1016/j.neuroimage.2023.120218}
+}
+
+@article{Brkic2023,
+    title = {{T}he impact of {ROI} extraction method for {MEG} connectivity estimation: practical recommendations for the study of resting state data},
+    author = {Brkić, Diandra and Sommariva, Sara and Schuler, Anna-Lisa and Pascarella, Annalisa and Belardinelli, Paolo and Isabella, Silvia L and Pino, Giovanni Di and Zago, Sara and Ferrazzi, Giulio and Rasero, Javier and Arcara, Giorgio and Marinazzo, Daniele and Pellegrino, Giovanni},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {284},
+    pages = {120424},
+    year = {2023},
+    doi = {10.1016/j.neuroimage.2023.120424}
+}
+
+@article{Kapralov2024,
+    title = {{S}ensorimotor brain-computer interface performance depends on signal-to-noise ratio but not connectivity of the mu rhythm in a multiverse analysis of longitudinal data},
+    author = {Kapralov, Nikolai and Jamshidi Idaji, Mina and Stephani, Tilman and Studenova, Alina and Vidaurre, Carmen and Ros, Tomas and Villringer, Arno and Nikulin, Vadim},
+    journal-long = {Journal of neural engineering},
+    journal = {J Neural Eng},
+    volume = {21},
+    pages = {10.1088/1741-2552/ad7a24},
+    year = {2024},
+    doi = {10.1088/1741-2552/ad7a24}
+}
+
+Connectivity
+
+@article{Welch1967,
+    author = {Welch, P.},
+    journal = {IEEE Transactions on Audio and Electroacoustics},
+    title = {The use of fast {F}ourier transform for the estimation of power spectra: {A} method based on time averaging over short, modified periodograms},
+    year = {1967},
+    volume = {15},
+    number = {2},
+    pages = {70-73},
+    doi = {10.1109/TAU.1967.1161901}}
+
+
+@article{Nolte2004,
+    title = {{I}dentifying true brain interaction from {EEG} data using the imaginary part of coherency},
+    author = {Nolte, Guido and Bai, Ou and Wheaton, Lewis and Mari, Zoltan and Vorbach, Sherry and Hallett, Mark},
+    journal-long = {Clinical neurophysiology : official journal of the International Federation of Clinical Neurophysiology},
+    journal = {Clin Neurophysiol},
+    volume = {115},
+    pages = {2292-307},
+    year = {2004},
+    doi = {10.1016/j.clinph.2004.04.029}
+}
+
+@article{Sekihara2011,
+    title = {{R}emoval of spurious coherence in {MEG} source-space coherence analysis},
+    author = {Sekihara, Kensuke and Owen, Julia P and Trisno, Stephan and Nagarajan, Srikantan S},
+    journal-long = {IEEE transactions on bio-medical engineering},
+    journal = {IEEE Trans Biomed Eng},
+    volume = {58},
+    pages = {3121-9},
+    year = {2011},
+    doi = {10.1109/TBME.2011.2162514}
+}
+
+Spurious coherence
+
+@article{Nunez1997,
+    title = {{EEG} coherency. {I}: {S}tatistics, reference electrode, volume conduction, {L}aplacians, cortical imaging, and interpretation at multiple scales},
+    author = {Nunez, P L and Srinivasan, R and Westdorp, A F and Wijesinghe, R S and Tucker, D M and Silberstein, R B and Cadusch, P J},
+    journal-long = {Electroencephalography and clinical neurophysiology},
+    journal = {Electroencephalogr Clin Neurophysiol},
+    volume = {103},
+    pages = {499-515},
+    year = {1997},
+    doi = {10.1016/s0013-4694(97)00066-7}
+}
+
+@InProceedings{Shahbazi2010,
+  author="Shahbazi, Forooz and Ewald, Arne and Ziehe, Andreas and Nolte, Guido",
+  editor="Supek, Selma and Su{\v{s}}ac, Ana",
+  title="{C}onstructing {S}urrogate {D}ata to {C}ontrol for {A}rtifacts of {V}olume {C}onduction for {F}unctional {C}onnectivity {M}easures",
+  booktitle="17th International Conference on Biomagnetism Advances in Biomagnetism -- Biomag2010",
+  year="2010",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="207--210",
+  isbn="978-3-642-12197-5",
+  doi="10.1007/978-3-642-12197-5_46"
+}
+
+@article{Idaji2022,
+    title = {{H}armoni: {A} method for eliminating spurious interactions due to the harmonic components in neuronal data},
+    author = {Idaji, Mina Jamshidi and Zhang, Juanli and Stephani, Tilman and Nolte, Guido and Müller, Klaus-Robert and Villringer, Arno and Nikulin, Vadim V},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {252},
+    pages = {119053},
+    year = {2022},
+    doi = {10.1016/j.neuroimage.2022.119053}
+}
+
+@article{Altukhov2023,
+    title = {{PSIICOS} projection optimality for {EEG} and {MEG} based functional coupling detection},
+    author = {Altukhov, Dmitrii and Kleeva, Daria and Ossadtchi, Alexei},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {280},
+    pages = {120333},
+    year = {2023},
+    doi = {10.1016/j.neuroimage.2023.120333}
+}
+
+Remaining field spread and connectivity problems
+
+@article{SchoffelenGross2009,
+    title = {{S}ource connectivity analysis with {MEG} and {EEG}},
+    author = {Schoffelen, Jan-Mathijs and Gross, Joachim},
+    journal-long = {Human brain mapping},
+    journal = {Hum Brain Mapp},
+    volume = {30},
+    pages = {1857-65},
+    year = {2009},
+    doi = {10.1002/hbm.20745}
+}
+
+@article{Palva2012,
+    title = {{D}iscovering oscillatory interaction networks with {M}/{EEG}: challenges and breakthroughs},
+    author = {Palva, Satu and Palva, J Matias},
+    journal-long = {Trends in cognitive sciences},
+    journal = {Trends Cogn Sci},
+    volume = {16},
+    pages = {219-30},
+    year = {2012},
+    doi = {10.1016/j.tics.2012.02.004}
+}
+
+@article{Palva2018,
+    title = {{G}host interactions in {MEG}/{EEG} source space: {A} note of caution on inter-areal coupling measures},
+    author = {Palva, J Matias and Wang, Sheng H and Palva, Satu and Zhigalov, Alexander and Monto, Simo and Brookes, Matthew J and Schoffelen, Jan-Mathijs and Jerbi, Karim},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {173},
+    pages = {632-643},
+    year = {2018},
+    doi = {10.1016/j.neuroimage.2018.02.032}
+}
+
+@article{Westner2024,
+    title = {{T}owards a more robust non-invasive assessment of functional connectivity},
+    author = {Westner, Britta U and Kujala, Jan and Gross, Joachim and Schoffelen, Jan-Mathijs},
+    journal-long = {Imaging neuroscience (Cambridge, Mass.)},
+    journal = {Imaging Neurosci (Camb)},
+    volume = {2},
+    pages = {imag-2-00119},
+    year = {2024},
+    doi = {10.1162/imag_a_00119}
+}
+
+@article{Wang2018,
+    title = {{H}yperedge bundling: {A} practical solution to spurious interactions in {MEG}/{EEG} source connectivity analyses},
+    author = {Wang, Sheng H and Lobier, Muriel and Siebenhühner, Felix and Puoliväli, Tuomas and Palva, Satu and Palva, J Matias},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {173},
+    pages = {610-622},
+    year = {2018},
+    doi = {10.1016/j.neuroimage.2018.01.056}
+}
+
+Inferred parameters
+
+@article{Scheer2006,
+    title = {{T}he influence of amplifier, interface and biological noise on signal quality in high-resolution {EEG} recordings},
+    author = {Scheer, Hans J and Sander, Tilmann and Trahms, Lutz},
+    journal-long = {Physiological measurement},
+    journal = {Physiol Meas},
+    volume = {27},
+    pages = {109-17},
+    year = {2006},
+    doi = {10.1088/0967-3334/27/2/002}
+}
+
+@article{Hashemi2021,
+    title = {{U}nification of sparse {B}ayesian learning algorithms for electromagnetic brain imaging with the majorization minimization framework},
+    author = {Hashemi, Ali and Cai, Chang and Kutyniok, Gitta and Müller, Klaus-Robert and Nagarajan, Srikantan S and Haufe, Stefan},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {239},
+    pages = {118309},
+    year = {2021},
+    doi = {10.1016/j.neuroimage.2021.118309}
+}
+
+Simulations
+
+@article{TimmerKoenig1995,
+    author = {{Timmer}, J. and {K{\"o}nig}, M.},
+    title = "{On generating power law noise.}",
+    journal = {Astronomy and Astrophysics},
+    year = 1995,
+    month = aug,
+    volume = {300},
+    pages = {707}
+}
+
+@article{HaufeEwald2019,
+    title = {{A} {S}imulation {F}ramework for {B}enchmarking {EEG}-{B}ased {B}rain {C}onnectivity {E}stimation {M}ethodologies},
+    author = {Haufe, Stefan and Ewald, Arne},
+    journal-long = {Brain topography},
+    journal = {Brain Topogr},
+    volume = {32},
+    pages = {625-642},
+    year = {2019},
+    doi = {10.1007/s10548-016-0498-y}
+}
+
+@article{Hincapie2017,
+    title = {{T}he impact of {MEG} source reconstruction method on source-space connectivity estimation: {A} comparison between minimum-norm solution and beamforming},
+    author = {Hincapié, Ana-Sofía and Kujala, Jan and Mattout, Jérémie and Pascarella, Annalisa and Daligault, Sebastien and Delpuech, Claude and Mery, Domingo and Cosmelli, Diego and Jerbi, Karim},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {156},
+    pages = {29-42},
+    year = {2017},
+    doi = {10.1016/j.neuroimage.2017.04.038}
+}
+
+@article{Idaji2020,
+    title = {{N}onlinear interaction decomposition ({NID}): {A} method for separation of cross-frequency coupled sources in human brain},
+    author = {Idaji, Mina Jamshidi and Müller, Klaus-Robert and Nolte, Guido and Maess, Burkhard and Villringer, Arno and Nikulin, Vadim V},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {211},
+    pages = {116599},
+    year = {2020},
+    doi = {10.1016/j.neuroimage.2020.116599}
+}
+
+@book{BendatPiersol2010,
+  title={Random Data: Analysis and Measurement Procedures},
+  author={Bendat, J.S. and Piersol, A.G.},
+  isbn={9781118032428},
+  series={Wiley Series in Probability and Statistics},
+  doi={10.1002/9781118032428},
+  year={2010},
+  publisher={Wiley}
+}
+
+SSVER
+
+@article{DiRusso2007,
+    title = {{S}patiotemporal analysis of the cortical sources of the steady-state visual evoked potential},
+    author = {Di Russo, Francesco and Pitzalis, Sabrina and Aprile, Teresa and Spitoni, Grazia and Patria, Fabiana and Stella, Alessandra and Spinelli, Donatella and Hillyard, Steven A},
+    journal-long = {Human brain mapping},
+    journal = {Hum Brain Mapp},
+    volume = {28},
+    pages = {323-34},
+    year = {2007},
+    doi = {10.1002/hbm.20276}
+}
+
+Source localization and spatial filtering
+
+@article{Lin2006,
+    title = {{A}ssessing and improving the spatial accuracy in {MEG} source localization by depth-weighted minimum-norm estimates},
+    author = {Lin, Fa-Hsuan and Witzel, Thomas and Ahlfors, Seppo P and Stufflebeam, Steven M and Belliveau, John W and Hämäläinen, Matti S},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {31},
+    pages = {160-71},
+    year = {2006},
+    doi = {10.1016/j.neuroimage.2005.11.054}
+}
+
+@article{Krishnaswamy2017,
+    title = {{S}parsity enables estimation of both subcortical and cortical activity from {MEG} and {EEG}},
+    author = {Krishnaswamy, Pavitra and Obregon-Henao, Gabriel and Ahveninen, Jyrki and Khan, Sheraz and Babadi, Behtash and Iglesias, Juan Eugenio and Hämäläinen, Matti S and Purdon, Patrick L},
+    journal-long = {Proceedings of the National Academy of Sciences of the United States of America},
+    journal = {Proc Natl Acad Sci U S A},
+    volume = {114},
+    pages = {E10465-E10474},
+    year = {2017},
+    doi = {10.1073/pnas.1705414114}
+}
+
+@article{deCheveigne2025,
+    author = {de Cheveign{\'e}, Alain},
+	title = {{S}patial filters {\textendash} {I}n search of the virtual electrode},
+    journal = {bioRxiv},
+	year = {2025},
+	doi = {10.1101/2023.09.19.558390},
+}
+
+Other
+
+@article{Haufe2014,
+    title = {{O}n the interpretation of weight vectors of linear models in multivariate neuroimaging},
+    author = {Haufe, Stefan and Meinecke, Frank and Görgen, Kai and Dähne, Sven and Haynes, John-Dylan and Blankertz, Benjamin and Bießmann, Felix},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {87},
+    pages = {96-110},
+    year = {2014},
+    doi = {10.1016/j.neuroimage.2013.10.067}
+}
+
+@article{Liljestroem2015,
+    title = {{T}ask- and stimulus-related cortical networks in language production: {E}xploring similarity of {MEG}- and f{MRI}-derived functional connectivity},
+    author = {Liljeström, Mia and Stevenson, Claire and Kujala, Jan and Salmelin, Riitta},
+    journal-long = {NeuroImage},
+    journal = {Neuroimage},
+    volume = {120},
+    pages = {75-87},
+    year = {2015},
+    doi = {10.1016/j.neuroimage.2015.07.017}
+}
+
+@article{Nolte2020,
+  title     = {{{M}athematical {R}elations {B}etween {M}easures of {B}rain {C}onnectivity {E}stimated {F}rom {E}lectrophysiological {R}ecordings for {G}aussian {D}istributed {D}ata}},
+  author    = {Nolte, G.  and Galindo-Leon, E.  and Li, Z.  and Liu, X.  and Engel, A. K.},
+  year      = 2020,
+  journal   = {Front Neurosci},
+  volume    = 14,
+  pages     = 577574,
+  doi       = {10.3389/fnins.2020.577574}
+}
+
+@article{Herrmann2001,
+    title = {{H}uman {EEG} responses to 1-100 {H}z flicker: resonance phenomena in visual cortex and their potential correlation to cognitive phenomena},
+    author = {Herrmann, C S},
+    journal-long = {Experimental brain research},
+    journal = {Exp Brain Res},
+    volume = {137},
+    pages = {346-53},
+    year = {2001},
+    doi = {10.1007/s002210100682}
+}
+
+@article{Srinivasan1998,
+    author={Srinivasan, Ramesh and Tucker, Don M. and Murias, Michael},
+    title={{E}stimating the spatial {N}yquist of the human {EEG}},
+    journal={Behavior Research Methods, Instruments, {\&} Computers},
+    year={1998},
+    month={Mar},
+    day={01},
+    volume={30},
+    number={1},
+    pages={8-19},
+    doi={10.3758/BF03209412}
+}
+
