@@ -2,7 +2,7 @@
 
 This repository contains a set of scripts that how cross-talk function can be used to understand the difference between pipelines for extraction of M/EEG activity from brain areas of interest. For more details about the project, please refer to the accompanying paper and consider citing it in case you use the scripts from this repository:
 
-> TBD
+> Kapralov, N., Studenova, A., Eguinoa, R., Nolte, G., Haufe, S., Villringer, A., & Nikulin, V. (2025). Non-uniform effects of remaining field spread on the estimation of M/EEG activity and connectivity between regions of interest. bioRxiv. https://doi.org/10.64898/2025.12.09.688708
 
 ## Prerequisites
 
